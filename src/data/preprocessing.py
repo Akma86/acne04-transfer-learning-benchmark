@@ -11,8 +11,16 @@ Implements the 7-step incremental preprocessing & ablation protocol:
 7. Class Imbalance Handling (Class-weighted Loss, WeightedRandomSampler / ROS)
 """
 
+import os
+# Prevent OpenMP runtime collision (common on Windows with PyTorch + OpenCV in Jupyter)
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+os.environ["OMP_NUM_THREADS"] = "1"
+
 from typing import Callable, Dict, List, Optional, Tuple, Union
 import cv2
+# Prevent OpenCV from spawning conflicting background thread pools with PyTorch
+cv2.setNumThreads(0)
+
 import numpy as np
 import pandas as pd
 from PIL import Image
@@ -90,7 +98,7 @@ class CLAHETransform:
         self.tile_grid_size = tile_grid_size
 
     def __call__(self, img: Image.Image) -> Image.Image:
-        np_img = np.array(img)
+        np_img = np.ascontiguousarray(np.array(img))
         # Convert RGB to LAB
         lab = cv2.cvtColor(np_img, cv2.COLOR_RGB2LAB)
         l, a, b = cv2.split(lab)
@@ -121,7 +129,7 @@ class ColorConstancyTransform:
         self.power_p = power_p
 
     def __call__(self, img: Image.Image) -> Image.Image:
-        np_img = np.array(img, dtype=np.float32)
+        np_img = np.ascontiguousarray(np.array(img, dtype=np.float32))
 
         if self.method == "gray_world":
             # Gray World Assumption: average scene color is neutral gray
@@ -200,7 +208,7 @@ class FaceCropTransform:
         x2 = min(img_w, x + w + pad_w)
         y2 = min(img_h, y + h + pad_h)
 
-        cropped = np_img[y1:y2, x1:x2]
+        cropped = np.ascontiguousarray(np_img[y1:y2, x1:x2])
         return Image.fromarray(cropped)
 
 
@@ -222,7 +230,7 @@ class SkinMaskTransform:
         self.blend_alpha = blend_alpha  # 0.0 = black background, 0.15 = dimmed background
 
     def __call__(self, img: Image.Image) -> Image.Image:
-        np_img = np.array(img)
+        np_img = np.ascontiguousarray(np.array(img))
 
         # 1. HSV Skin Thresholding
         hsv = cv2.cvtColor(np_img, cv2.COLOR_RGB2HSV)
