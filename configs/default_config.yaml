@@ -8,32 +8,54 @@ dataset:
   metadata_csv: "data/metadata/acne04_metadata.csv"
   num_classes: 4
   class_names: ["Level 0 (Normal)", "Level 1 (Mild)", "Level 2 (Moderate)", "Level 3 (Severe)"]
-  image_size: 224 # or 384 for ViT
+  image_size: 224 # 224 standard, 384 for ViT-Large
   batch_size: 32
-  num_workers: 4
+  num_workers: 2
   val_split: 0.15
   test_split: 0.15
+
+# Incremental Preprocessing Protocol (Ablation Stages 1 to 7)
+preprocessing:
+  active_stage: 1 # Set 1 to 7 to evaluate incremental impact
+  stages:
+    1: "Resize 224x224 + ImageNet Normalization (Raw Baseline)"
+    2: "+ Data Augmentation (Random Horizontal Flip, Rotation 15 deg, Color Jitter)"
+    3: "+ CLAHE (Contrast Limited Adaptive Histogram Equalization on L-channel)"
+    4: "+ Color Constancy / White Balance (Gray World or Shades of Gray)"
+    5: "+ Face Detection & Cropping (OpenCV Haar Cascade with safety padding)"
+    6: "+ Skin Segmentation & Masking (HSV + YCbCr color spaces)"
+    7: "+ Class Imbalance Handling (Cost-Sensitive Weights or ROS Sampler)"
+  hyperparameters:
+    clahe_clip_limit: 2.0
+    clahe_tile_grid: [8, 8]
+    wb_method: "gray_world" # 'gray_world' or 'shades_of_gray'
+    face_crop_margin: 0.15
+    skin_blend_alpha: 0.15 # 0.0 for pure black background, 0.15 for soft dimming
+    imbalance_strategy: "class_weights" # 'none', 'class_weights', 'ros'
 
 # Candidate Architectures for Benchmarking
 models:
   - name: "mobilenet_v2"
     pretrained: true
+    description: "Lightweight inverted residual CNN for mobile/tele-dermatology"
   - name: "efficientnet_b0"
     pretrained: true
+    description: "Compound scaled CNN optimizing parameter-accuracy trade-off"
   - name: "resnet50"
     pretrained: true
-  - name: "vit_base_patch16_224"
+    description: "Classic deep residual convolutional baseline"
+  - name: "vit"
     pretrained: true
+    description: "Vision Transformer (ViT-B/16) utilizing patch-based self-attention"
 
 # Training Hyperparameters
 training:
-  epochs: 50
+  epochs: 30
   learning_rate: 0.0003
   weight_decay: 0.01
   optimizer: "AdamW"
   scheduler: "CosineAnnealingLR"
-  early_stopping_patience: 10
-  criterion: "CrossEntropyLoss" # Consider WeightedCrossEntropy or FocalLoss due to class imbalance
+  early_stopping_patience: 8
 
 # Output Paths
 output:

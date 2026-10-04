@@ -1,4 +1,10 @@
-import timm
+import numpy as np
+# NumPy 2.0 compatibility shims
+if not hasattr(np, "float_"):
+    np.float_ = np.float64
+if not hasattr(np, "int_"):
+    np.int_ = np.int64
+
 import torch
 import torch.nn as nn
 import torchvision.models as models
@@ -12,15 +18,15 @@ def build_transfer_model(
 ) -> nn.Module:
     """Builds and initializes candidate transfer learning models for acne classification.
 
-    Supported architectures:
-    - 'mobilenet_v2': Lightweight CNN designed for low-latency inference.
-    - 'efficientnet_b0': Compound-scaled CNN with high parameter efficiency.
-    - 'resnet50': Classic deep residual network baseline.
-    - 'vit_base_patch16_224' (or 'vit'): Vision Transformer with self-attention.
+    Supported candidate architectures:
+    - 'mobilenet_v2': Lightweight inverted residual CNN for mobile/edge diagnosis.
+    - 'efficientnet_b0': Compound-scaled CNN with optimal parameter efficiency.
+    - 'resnet50': Deep residual baseline network.
+    - 'vit' / 'vit_b_16': Vision Transformer using self-attention across image patches.
     """
     model_name_lower = model_name.lower().replace("-", "_")
 
-    if model_name_lower == "mobilenet_v2":
+    if model_name_lower in ["mobilenet_v2", "mobilenet"]:
         weights = (
             models.MobileNet_V2_Weights.DEFAULT if pretrained else None
         )
@@ -54,24 +60,21 @@ def build_transfer_model(
         )
         return model
 
-    elif "vit" in model_name_lower:
-        # Utilize timm for state-of-the-art Vision Transformers
-        timm_name = (
-            "vit_base_patch16_224"
-            if model_name_lower in ["vit", "vit_base"]
-            else model_name
-        )
-        model = timm.create_model(
-            timm_name,
-            pretrained=pretrained,
-            num_classes=num_classes,
-            drop_rate=dropout_rate,
+    elif model_name_lower in ["vit", "vit_b_16", "vision_transformer"]:
+        # Native PyTorch Vision Transformer (ViT-B/16)
+        weights = models.ViT_B_16_Weights.DEFAULT if pretrained else None
+        model = models.vit_b_16(weights=weights)
+        in_features = model.heads.head.in_features
+        model.heads.head = nn.Sequential(
+            nn.Dropout(p=dropout_rate),
+            nn.Linear(in_features, num_classes),
         )
         return model
 
     else:
-        # Fallback to general timm model creation
+        # Optional fallback via timm
         try:
+            import timm
             return timm.create_model(
                 model_name,
                 pretrained=pretrained,
@@ -80,5 +83,6 @@ def build_transfer_model(
             )
         except Exception as e:
             raise ValueError(
-                f"Model '{model_name}' is not recognized. Error: {e}"
+                f"Model '{model_name}' is not recognized. Choose from "
+                f"['mobilenet_v2', 'efficientnet_b0', 'resnet50', 'vit']. (Error: {e})"
             )

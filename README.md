@@ -81,7 +81,9 @@ acne04-transfer-learning-benchmark/
 │   ├── papers_summary.md        # Summary of 29 related research papers
 │   └── .gitkeep
 ├── notebooks/                   # Interactive exploratory Jupyter notebooks
-│   ├── 01_acne04_dataset_exploration.ipynb
+│   ├── 01_acne04_dataset_exploration.ipynb        # Dataset discovery & starter guide
+│   ├── 02_acne04_comprehensive_eda.ipynb          # Dermatological EDA & color analysis
+│   ├── 03_preprocessing_ablation_pipeline.ipynb  # Visual comparison of stages 1-7
 │   └── .gitkeep
 ├── outputs/
 │   ├── checkpoints/             # Trained PyTorch model weights (ignored by git)
@@ -93,20 +95,37 @@ acne04-transfer-learning-benchmark/
 ├── src/                         # Modular research source code
 │   ├── data/
 │   │   ├── __init__.py
-│   │   └── dataset.py           # PyTorch Dataset and transforms
+│   │   ├── dataset.py           # PyTorch Dataset and split loading
+│   │   └── preprocessing.py     # 7-Stage Preprocessing & Ablation Pipeline
 │   ├── models/
 │   │   ├── __init__.py
-│   │   └── transfer_models.py   # Model factory for candidate backbones
+│   │   └── transfer_models.py   # MobileNetV2, EfficientNet-B0, ResNet-50, ViT
 │   ├── utils/
 │   │   ├── __init__.py
 │   │   └── metrics.py           # Multi-class & ordinal evaluation metrics
-│   ├── train.py                 # CLI model training pipeline
+│   ├── train.py                 # CLI model training & ablation pipeline
 │   └── __init__.py
 ├── .gitignore                   # Excludes heavy datasets and model weights
 ├── LICENSE                      # MIT License
 ├── requirements.txt             # Project dependencies
 └── README.md                    # Project documentation
 ```
+
+---
+
+## 7-Stage Incremental Preprocessing Protocol
+
+To systematically isolate and measure the empirical contribution of each computer vision technique, this study introduces a standardized **7-Stage Incremental Ablation Pipeline**:
+
+| Stage | Preprocessing Component | Operational Method | Clinical Rationale |
+|:-----:|:------------------------|:-------------------|:-------------------|
+| **Stage 1** | **Raw Baseline** | Resize $224 \times 224$ + ImageNet Normalization | Standardized input tensor dimension required by pretrained backbones. |
+| **Stage 2** | **+ Data Augmentation** | Random Horizontal Flip, Mild Rotation ($15^\circ$), Color Jitter | Prevents overfitting and simulates natural pose/angle variations. |
+| **Stage 3** | **+ CLAHE** | Contrast Limited Adaptive Histogram Equalization on $L$-channel | Enhances micro-textures of comedones, papules, and pustules without color distortion. |
+| **Stage 4** | **+ Color Constancy** | White Balance via Gray World / Shades of Gray algorithm | Normalizes ambient lighting and camera temperature differences. |
+| **Stage 5** | **+ Face Cropping** | OpenCV Haar Cascade detection with 15% safety padding | Discards non-facial clutter (clothing, hospital backdrop) while preserving lesion margins. |
+| **Stage 6** | **+ Skin Masking** | Epidermal segmentation fusing HSV and YCbCr thresholds | Focuses deep representations strictly on skin surface textures. |
+| **Stage 7** | **+ Imbalance Handling**| Cost-Sensitive Class Weights ($w_c = \frac{N}{K \cdot N_c}$) & ROS Sampler | Overcomes the severe 6.5:1 class frequency skew, boosting minority grade sensitivity. |
 
 ---
 
@@ -139,27 +158,29 @@ pip install -r requirements.txt
 
 ## Workflow & Getting Started
 
-### Step 1: Dataset Inspection & Metadata Generation
-Launch Jupyter Notebook to inspect images, analyze class imbalance, and generate `data/metadata/acne04_metadata.csv` with stratified splits:
+### Step 1: Visual Preprocessing Inspection
+Launch Jupyter Notebook to inspect images and visualize the 7 preprocessing stages side-by-side:
 ```bash
-jupyter notebook notebooks/01_acne04_dataset_exploration.ipynb
+jupyter notebook notebooks/03_preprocessing_ablation_pipeline.ipynb
 ```
 
-### Step 2: Train Transfer Learning Models
-Train candidate architectures via the modular command-line interface:
+### Step 2: Running Ablation Experiments
+Evaluate each candidate architecture incrementally from **Stage 1 (Raw Baseline)** through **Stage 7 (Full Pipeline)**:
 
 ```bash
-# Train MobileNetV2
-python src/train.py --model mobilenet_v2 --epochs 30 --batch_size 32 --lr 3e-4
+# === MobileNetV2 Ablation Series ===
+python src/train.py --model mobilenet_v2 --stage 1 --epochs 30   # Raw Baseline
+python src/train.py --model mobilenet_v2 --stage 2 --epochs 30   # + Augmentation
+python src/train.py --model mobilenet_v2 --stage 3 --epochs 30   # + CLAHE
+python src/train.py --model mobilenet_v2 --stage 4 --epochs 30   # + Color Constancy
+python src/train.py --model mobilenet_v2 --stage 5 --epochs 30   # + Face Cropping
+python src/train.py --model mobilenet_v2 --stage 6 --epochs 30   # + Skin Masking
+python src/train.py --model mobilenet_v2 --stage 7 --epochs 30   # + Imbalance Weights
 
-# Train EfficientNet-B0
-python src/train.py --model efficientnet_b0 --epochs 30 --batch_size 32 --lr 3e-4
-
-# Train ResNet-50
-python src/train.py --model resnet50 --epochs 30 --batch_size 32 --lr 1e-4
-
-# Train Vision Transformer (ViT)
-python src/train.py --model vit --epochs 30 --batch_size 16 --lr 5e-5
+# === Benchmarking Other Architectures (Stage 7 Full Pipeline) ===
+python src/train.py --model efficientnet_b0 --stage 7 --epochs 30
+python src/train.py --model resnet50        --stage 7 --epochs 30
+python src/train.py --model vit             --stage 7 --epochs 30 --batch_size 16
 ```
 
 ---
