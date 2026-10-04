@@ -1,8 +1,10 @@
 from src.data.dataset import ACNE04Dataset, get_default_transforms
 from src.data.preprocessing import (
+    RemoveBackgroundTransform,
     STAGE_DESCRIPTIONS,
     apply_clahe,
     apply_color_constancy,
+    apply_remove_bg,
     apply_skin_mask,
     build_pipeline_by_stage,
     compute_class_weights,
@@ -24,5 +26,7 @@ __all__ = [
     "apply_color_constancy",
     "crop_face",
     "apply_skin_mask",
+    "apply_remove_bg",
+    "RemoveBackgroundTransform",
     "STAGE_DESCRIPTIONS",
 ]

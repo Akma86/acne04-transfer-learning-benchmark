@@ -1,6 +1,16 @@
 import argparse
 import os
+import sys
 from pathlib import Path
+
+# OpenMP multi-threading safety guards for Windows (PyTorch & OpenCV)
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+os.environ["OMP_NUM_THREADS"] = "1"
+
+# Add project root to sys.path
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 import torch
 import torch.nn as nn
@@ -64,6 +74,24 @@ def parse_args():
         default=0.15,
         help="Background blend factor for skin segmentation (0.0=black, 0.15=dimmed)",
     )
+    # Deep Background Removal & Face Focus
+    parser.add_argument(
+        "--remove_bg",
+        action="store_true",
+        help="Apply deep salient background removal to strictly focus on the facial region",
+    )
+    parser.add_argument(
+        "--nobg_color",
+        type=str,
+        default="black",
+        choices=["black", "white", "gray"],
+        help="Background fill color when remove_bg is enabled",
+    )
+    parser.add_argument(
+        "--nobg_no_crop",
+        action="store_true",
+        help="Disable auto-cropping to the facial bounding box when remove_bg is enabled",
+    )
     # Class Imbalance Handling
     parser.add_argument(
         "--imbalance_method",
@@ -103,6 +131,8 @@ def main():
     print("=" * 75)
     print(f" EXPERIMENT: {args.model.upper()} | PREPROCESSING STAGE {args.stage}/7")
     print(f" {STAGE_DESCRIPTIONS[args.stage]}")
+    if args.remove_bg:
+        print(f" Background Removal: ENABLED (fill={args.nobg_color}, crop_face={not args.nobg_no_crop})")
     print(f" Device: {args.device} | Image Size: {args.img_size}x{args.img_size}")
     print("=" * 75)
 
@@ -119,6 +149,9 @@ def main():
         wb_method=args.wb_method,
         face_margin=args.face_margin,
         skin_blend=args.skin_blend,
+        remove_bg=args.remove_bg,
+        nobg_color=args.nobg_color,
+        nobg_crop_to_face=not args.nobg_no_crop,
     )
     eval_tf = build_pipeline_by_stage(
         stage=args.stage,
@@ -128,6 +161,9 @@ def main():
         wb_method=args.wb_method,
         face_margin=args.face_margin,
         skin_blend=args.skin_blend,
+        remove_bg=args.remove_bg,
+        nobg_color=args.nobg_color,
+        nobg_crop_to_face=not args.nobg_no_crop,
     )
 
     # Initialize Datasets

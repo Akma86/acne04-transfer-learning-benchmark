@@ -32,6 +32,9 @@ preprocessing:
     face_crop_margin: 0.15
     skin_blend_alpha: 0.15 # 0.0 for pure black background, 0.15 for soft dimming
     imbalance_strategy: "class_weights" # 'none', 'class_weights', 'ros'
+    remove_bg: false # Set true to enable deep background removal & facial focus
+    nobg_color: "black" # 'black', 'white', or 'gray'
+    nobg_crop_to_face: true # Zoom & frame bounding box around facial region
 
 # Candidate Architectures for Benchmarking
 models:

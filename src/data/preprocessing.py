@@ -16,7 +16,7 @@ import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 os.environ["OMP_NUM_THREADS"] = "1"
 
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 import cv2
 # Prevent OpenCV from spawning conflicting background thread pools with PyTorch
 cv2.setNumThreads(0)
@@ -267,6 +267,110 @@ def apply_skin_mask(img: Image.Image, blend_alpha: float = 0.15) -> Image.Image:
 
 
 # ==============================================================================
+# 6.1 Deep Background Removal & Face Isolation (rembg + Auto-Crop)
+# ==============================================================================
+
+class RemoveBackgroundTransform:
+    """Removes non-facial backgrounds using deep salient segmentation (U2Net/rembg).
+
+    Features:
+    - Eliminates walls, medical bibs, backdrop clutter, and second persons in the background.
+    - Robust macro fallback: if the input is an extreme close-up of a cheek (foreground ratio < 20%),
+      it gracefully falls back to skin thresholding so acne lesions are never erased.
+    - Optional auto-cropping to the non-zero face bounding box to maximize facial lesion focus.
+    """
+    def __init__(
+        self,
+        bg_color: Union[str, Tuple[int, int, int]] = "black",
+        crop_to_face: bool = True,
+        padding: float = 0.05,
+        session: Any = None,
+    ):
+        self.crop_to_face = crop_to_face
+        self.padding = padding
+        self.session = session
+
+        if isinstance(bg_color, str):
+            if bg_color.lower() == "black":
+                self.bg_color = (0, 0, 0)
+            elif bg_color.lower() == "white":
+                self.bg_color = (255, 255, 255)
+            elif bg_color.lower() == "gray":
+                self.bg_color = (128, 128, 128)
+            else:
+                self.bg_color = (0, 0, 0)
+        else:
+            self.bg_color = bg_color
+
+    def __call__(self, img: Image.Image) -> Image.Image:
+        try:
+            import rembg
+        except ImportError:
+            # Fallback to skin mask if rembg is unavailable
+            return SkinMaskTransform(blend_alpha=0.0)(img)
+
+        np_img = np.ascontiguousarray(np.array(img))
+
+        # Lazy init persistent session if not passed
+        if self.session is None:
+            self.session = rembg.new_session("u2net")
+
+        # 1. Run salient foreground segmentation with cached session
+        rgba = rembg.remove(img, session=self.session)
+        alpha = np.array(rgba)[:, :, 3]
+        fg_ratio = np.count_nonzero(alpha > 15) / alpha.size
+
+        # 2. Safety fallback for extreme macro close-ups (e.g. tight cheek shots)
+        if fg_ratio < 0.20:
+            hsv = cv2.cvtColor(np_img, cv2.COLOR_RGB2HSV)
+            mask_hsv = cv2.inRange(hsv, np.array([0, 30, 60]), np.array([25, 255, 255]))
+            ycbcr = cv2.cvtColor(np_img, cv2.COLOR_RGB2YCrCb)
+            mask_ycb = cv2.inRange(ycbcr, np.array([80, 135, 85]), np.array([255, 180, 135]))
+            skin_mask = cv2.bitwise_or(mask_hsv, mask_ycb)
+            kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9))
+            skin_mask = cv2.morphologyEx(skin_mask, cv2.MORPH_CLOSE, kernel, iterations=3)
+            skin_mask = cv2.morphologyEx(skin_mask, cv2.MORPH_OPEN, kernel, iterations=2)
+            alpha = skin_mask
+
+        # 3. Optional framing crop to face bounding box
+        if self.crop_to_face:
+            rows = np.any(alpha > 15, axis=1)
+            cols = np.any(alpha > 15, axis=0)
+            if np.any(rows) and np.any(cols):
+                ymin, ymax = np.where(rows)[0][[0, -1]]
+                xmin, xmax = np.where(cols)[0][[0, -1]]
+                h, w = alpha.shape
+                pad_h = int((ymax - ymin) * self.padding)
+                pad_w = int((xmax - xmin) * self.padding)
+                ymin = max(0, ymin - pad_h)
+                ymax = min(h, ymax + pad_h)
+                xmin = max(0, xmin - pad_w)
+                xmax = min(w, xmax + pad_w)
+                np_img = np_img[ymin:ymax, xmin:xmax]
+                alpha = alpha[ymin:ymax, xmin:xmax]
+
+        # 4. Composite onto background color
+        mask_3d = (alpha[:, :, None] / 255.0).astype(np.float32)
+        bg_arr = np.full_like(np_img, self.bg_color, dtype=np.float32)
+        composite = np.clip(
+            np_img.astype(np.float32) * mask_3d + bg_arr * (1.0 - mask_3d),
+            0,
+            255
+        ).astype(np.uint8)
+        return Image.fromarray(composite)
+
+
+def apply_remove_bg(
+    img: Image.Image,
+    bg_color: str = "black",
+    crop_to_face: bool = True,
+    session: Any = None,
+) -> Image.Image:
+    """Functional wrapper for deep background removal and face isolation."""
+    return RemoveBackgroundTransform(bg_color=bg_color, crop_to_face=crop_to_face, session=session)(img)
+
+
+# ==============================================================================
 # 7. Class Imbalance Handling (Loss Weights & Sampler)
 # ==============================================================================
 
@@ -344,7 +448,10 @@ def build_pipeline_by_stage(
     clahe_clip: float = 2.0,
     wb_method: str = "gray_world",
     face_margin: float = 0.15,
-    skin_blend: float = 0.15
+    skin_blend: float = 0.15,
+    remove_bg: bool = False,
+    nobg_color: str = "black",
+    nobg_crop_to_face: bool = True,
 ) -> T.Compose:
     """Builds the cumulative transformation pipeline up to the specified stage (1 through 7).
 
@@ -352,14 +459,27 @@ def build_pipeline_by_stage(
         stage: Integer 1 to 7 corresponding to the incremental ablation study.
         image_size: Target square image dimension (e.g., 224).
         is_train: Whether this pipeline is for training (True) or validation/testing (False).
+        clahe_clip: Clip limit for CLAHE.
+        wb_method: 'gray_world' or 'shades_of_gray'.
+        face_margin: Bounding box padding for Haar face crop.
+        skin_blend: Background dimming blend factor for skin mask.
+        remove_bg: If True, applies deep salient background removal & face focus.
+        nobg_color: Fill color for removed background ('black', 'white', or 'gray').
+        nobg_crop_to_face: If True, crops to the foreground face bounding box.
     """
     if stage < 1 or stage > 7:
         raise ValueError(f"Stage must be an integer between 1 and 7 (received {stage}).")
 
     pre_resize_transforms: List[Callable] = []
 
+    # Optional deep background removal & face isolation
+    if remove_bg:
+        pre_resize_transforms.append(
+            RemoveBackgroundTransform(bg_color=nobg_color, crop_to_face=nobg_crop_to_face)
+        )
+
     # Stages 5 & 6 happen on spatial resolution before final model resize
-    if stage >= 5:
+    if stage >= 5 and not (remove_bg and nobg_crop_to_face):
         pre_resize_transforms.append(FaceCropTransform(margin=face_margin))
 
     if stage >= 6:
