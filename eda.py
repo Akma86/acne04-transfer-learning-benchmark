@@ -55,8 +55,10 @@ for folder_name, cfg in CLASS_CONFIG.items():
 
     for img_path in folder_path.glob("*.jpg"):
         size_kb = round(os.path.getsize(img_path) / 1024, 2)
+        rel_path = str(img_path.relative_to(PROJECT_ROOT)).replace("\\", "/")
         records.append({
-            "filepath": str(img_path.relative_to(PROJECT_ROOT)).replace("\\", "/"),
+            "relative_path": rel_path,
+            "filepath": rel_path,
             "filename": img_path.name,
             "label": cfg["label"],
             "severity": cfg["tier"],
@@ -84,10 +86,17 @@ colors = ["#2ecc71", "#3498db", "#f39c12", "#e74c3c"]
 fig, axes = plt.subplots(1, 2, figsize=(15, 5))
 
 # Bar Chart
-sns.barplot(x=class_counts.index, y=class_counts.values, ax=axes[0], palette=colors)
+sns.barplot(
+    x=class_counts.index, 
+    y=class_counts.values, 
+    ax=axes[0], 
+    hue=class_counts.index, 
+    palette=colors, 
+    legend=False
+)
 axes[0].set_title("ACNE04 Class Frequency Distribution", fontweight="bold", pad=10)
 axes[0].set_ylabel("Number of Samples")
-axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=15)
+axes[0].tick_params(axis="x", rotation=15)
 
 for p in axes[0].patches:
     axes[0].annotate(
@@ -110,7 +119,7 @@ axes[1].set_title("Proportional Class Breakdown", fontweight="bold", pad=10)
 plt.tight_layout()
 fig_path = OUTPUT_FIG_DIR / "class_distribution.png"
 plt.savefig(fig_path, dpi=300)
-plt.show()
+plt.close(fig)
 
 imbalance_ratio = class_counts.max() / class_counts.min()
 print(f"--> Saved chart to: {fig_path}")
@@ -120,8 +129,15 @@ print(f"--> Class Imbalance Ratio (Majority / Minority): {imbalance_ratio:.2f} :
 # ## 3. File Size (Compression Complexity) vs Severity
 
 # %%
-plt.figure(figsize=(10, 5))
-sns.boxplot(data=df, x="severity", y="size_kb", palette=colors)
+fig_size = plt.figure(figsize=(10, 5))
+sns.boxplot(
+    data=df, 
+    x="severity", 
+    y="size_kb", 
+    hue="severity", 
+    palette=colors, 
+    legend=False
+)
 plt.title("JPEG File Size Distribution Across Acne Severity Tiers", fontweight="bold")
 plt.ylabel("File Size (Kilobytes)")
 plt.xlabel("Severity Tier")
@@ -130,7 +146,8 @@ plt.tight_layout()
 
 file_size_fig = OUTPUT_FIG_DIR / "file_size_analysis.png"
 plt.savefig(file_size_fig, dpi=300)
-plt.show()
+plt.close(fig_size)
+print(f"--> Saved file size chart to: {file_size_fig}")
 
 # %% [markdown]
 # ## 4. Qualitative Image Gallery (Visual Comparison)
@@ -153,7 +170,7 @@ plt.suptitle("ACNE04 Qualitative Morphology Across Severity Levels", fontsize=14
 plt.tight_layout()
 gallery_fig = OUTPUT_FIG_DIR / "sample_gallery.png"
 plt.savefig(gallery_fig, dpi=300)
-plt.show()
+plt.close(fig)
 
 print(f"--> Qualitative visual gallery saved to: {gallery_fig}")
 
@@ -172,7 +189,10 @@ df.loc[test_df.index, "split"] = "test"
 
 output_csv = METADATA_DIR / "acne04_metadata.csv"
 df.to_csv(output_csv, index=False)
-print(f"--> Generated metadata with stratified splits: {output_csv}")
-display(pd.crosstab(df["severity"], df["split"], margins=True))
+try:
+    display(pd.crosstab(df["severity"], df["split"], margins=True))
+except NameError:
+    print(pd.crosstab(df["severity"], df["split"], margins=True))
 
 print("\n=== EDA Pipeline Successfully Completed! ===")
+

@@ -114,8 +114,8 @@ acne04-transfer-learning/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/<your-username>/acne04-transfer-learning.git
-cd acne04-transfer-learning
+git clone https://github.com/Akma86/acne04-transfer-learning-benchmark.git
+cd acne04-transfer-learning-benchmark
 ```
 
 ### 2. Create Virtual Environment
