@@ -64,7 +64,7 @@ The benchmark evaluates four candidate architectures covering lightweight edge m
 ## Repository Structure
 
 ```text
-acne04-transfer-learning/
+acne04-transfer-learning-benchmark/
 ├── configs/                     # Experiment hyperparameter configurations
 │   ├── default_config.yaml
 │   └── .gitkeep
