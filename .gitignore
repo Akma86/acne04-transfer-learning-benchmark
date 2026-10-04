@@ -1,0 +1,70 @@
+# ==============================================================================
+# Byte-compiled / optimized / DLL files
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# ==============================================================================
+# Virtual Environments
+# ==============================================================================
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ==============================================================================
+# Jupyter Notebooks
+# ==============================================================================
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# ==============================================================================
+# Data and Datasets (Do NOT commit large image files or archives)
+# ==============================================================================
+data/raw/acne_1024/
+data/raw/*.zip
+data/raw/*.tar.gz
+data/raw/*.rar
+data/processed/*
+!data/processed/.gitkeep
+*.jpg
+*.jpeg
+*.png
+
+# ==============================================================================
+# Model Weights, Checkpoints & Artifacts
+# ==============================================================================
+outputs/checkpoints/*
+!outputs/checkpoints/.gitkeep
+outputs/logs/*
+!outputs/logs/.gitkeep
+outputs/figures/*
+!outputs/figures/.gitkeep
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.h5
+*.pkl
+*.bin
+
+# ==============================================================================
+# Academic Papers (Avoid pushing copyrighted large PDF files to remote git)
+# ==============================================================================
+docs/papers/*.pdf
+!docs/papers/.gitkeep
+
+# ==============================================================================
+# OS & Editor specific files
+# ==============================================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

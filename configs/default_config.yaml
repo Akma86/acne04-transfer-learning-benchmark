@@ -1,0 +1,42 @@
+# Experiment Configuration
+experiment_name: "acne04_transfer_learning_benchmark"
+seed: 42
+
+# Dataset Configuration
+dataset:
+  raw_dir: "data/raw/acne_1024"
+  metadata_csv: "data/metadata/acne04_metadata.csv"
+  num_classes: 4
+  class_names: ["Level 0 (Normal)", "Level 1 (Mild)", "Level 2 (Moderate)", "Level 3 (Severe)"]
+  image_size: 224 # or 384 for ViT
+  batch_size: 32
+  num_workers: 4
+  val_split: 0.15
+  test_split: 0.15
+
+# Candidate Architectures for Benchmarking
+models:
+  - name: "mobilenet_v2"
+    pretrained: true
+  - name: "efficientnet_b0"
+    pretrained: true
+  - name: "resnet50"
+    pretrained: true
+  - name: "vit_base_patch16_224"
+    pretrained: true
+
+# Training Hyperparameters
+training:
+  epochs: 50
+  learning_rate: 0.0003
+  weight_decay: 0.01
+  optimizer: "AdamW"
+  scheduler: "CosineAnnealingLR"
+  early_stopping_patience: 10
+  criterion: "CrossEntropyLoss" # Consider WeightedCrossEntropy or FocalLoss due to class imbalance
+
+# Output Paths
+output:
+  checkpoints_dir: "outputs/checkpoints"
+  figures_dir: "outputs/figures"
+  logs_dir: "outputs/logs"
