@@ -60,9 +60,12 @@ outputs/figures/*
 *.bin
 
 # ==============================================================================
-# Academic Papers (Avoid pushing copyrighted large PDF files to remote git)
+# Academic Papers & Research Docs (Keep folder structure via .gitkeep)
 # ==============================================================================
-docs/papers/*.pdf
+docs/*
+!docs/.gitkeep
+!docs/papers/
+docs/papers/*
 !docs/papers/.gitkeep
 
 # ==============================================================================
