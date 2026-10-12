@@ -64,9 +64,12 @@ outputs/figures/*
 # ==============================================================================
 docs/*
 !docs/.gitkeep
-!docs/papers/
-docs/papers/*
-!docs/papers/.gitkeep
+!docs/references/
+docs/references/*
+!docs/references/.gitkeep
+!docs/paper/
+docs/paper/*
+!docs/paper/.gitkeep
 
 # ==============================================================================
 # OS & Editor specific files
