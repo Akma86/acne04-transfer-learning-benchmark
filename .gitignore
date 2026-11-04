@@ -64,6 +64,8 @@ outputs/figures/*
 # ==============================================================================
 docs/*
 !docs/.gitkeep
+!docs/Tugas/
+!docs/Tugas/*.docx
 !docs/references/
 docs/references/*
 !docs/references/.gitkeep

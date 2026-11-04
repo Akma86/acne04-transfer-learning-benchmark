@@ -1,0 +1,181 @@
+TOTAL ACTIVE CITES IN PAPER: 26
+TOTAL PDFS IN docs/references: 38
+==========================================================================================
+
+STATUS SUMMARY: 26 / 26 CITATIONS HAVE PDF FILES IN docs/references
+
+--- 1. CITATIONS DENGAN FILE PDF (SUDAH ADA DI FOLDER) ---
+[ADA] alzahrani2022
+      Penulis : Alzahrani, Sara and Al-Bander, Baidaa and Al-Nuaimy, Waleed
+      Judul   : Attention Mechanism Guided Deep Regression Model for Acne Severity Grading
+      File PDF: Attention Mechanism Guided Deep Regression Model for Acne Severity Grading.pdf
+      Lokasi  : Pendahuluan.tex:14
+
+[ADA] davila2024
+      Penulis : Davila, Alejandro and Colan, Jorge and Hasegawa, Yasuhisa
+      Judul   : Comparison of fine-tuning strategies for transfer learning in medical image classification
+      File PDF: Comparison of fine-tuning strategies for transfer learning in medical image classification.pdf
+      Lokasi  : Kajian-Pustaka.tex:43, Kajian-Pustaka.tex:43, Kajian-Pustaka.tex:45, Kajian-Pustaka.tex:45, Kajian-Pustaka.tex:45, Kajian-Pustaka.tex:50, Kajian-Pustaka.tex:50, Kajian-Pustaka.tex:51, Kajian-Pustaka.tex:51, Kajian-Pustaka.tex:67
+
+[ADA] deng2009imagenet
+      Penulis : Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Li, Kai and Fei-Fei, Li
+      Judul   : ImageNet: A large-scale hierarchical image database
+      File PDF: ImageNet A Large-Scale Hierarchical Image Database.pdf
+      Lokasi  : Kajian-Pustaka.tex:45
+
+[ADA] gao2025
+      Penulis : Gao, N. and Wang, J. and Zhao, Z. and others
+      Judul   : Evaluation of an acne lesion detection and severity grading model for Chinese population in online and offline healthcare scenarios
+      File PDF: Evaluation of an acne lesion detection and severity grading model for Chinese population in online and offline healthcare scenarios.pdf
+      Lokasi  : Kajian-Pustaka.tex:19
+
+[ADA] hayashi2008
+      Penulis : Hayashi, Nobukazu and Akamatsu, Hirohiko and Kawambata, Shigeo and others
+      Judul   : Establishment of grading criteria for acne severity
+      File PDF: Establishment of grading criteria for acne severity.pdf
+      Lokasi  : Kajian-Pustaka.tex:7, Kajian-Pustaka.tex:12, Kajian-Pustaka.tex:12, Kajian-Pustaka.tex:16, Kajian-Pustaka.tex:16, Pendahuluan.tex:10
+
+[ADA] he2016deep
+      Penulis : He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian
+      Judul   : Deep Residual Learning for Image Recognition
+      File PDF: Deep Residual Learning for Image Recognition.pdf
+      Lokasi  : Kajian-Pustaka.tex:65
+
+[ADA] howard2019searching
+      Penulis : Howard, Andrew and Sandler, Mark and Chu, Grace and Chen, Liang-Chieh and Chen, Bo and Tan, Mingxing and Wang, Weijun and Zhu, Yukun and Pang, Ruoming and Vasudevan, Vijay and Le, Quoc V. and Adam, Hartwig
+      Judul   : Searching for MobileNetV3
+      File PDF: Searching for MobileNetV3.pdf
+      Lokasi  : Kajian-Pustaka.tex:83
+
+[ADA] huynh2022
+      Penulis : Huynh, Q. T. and Nguyen, P. H. and Le, H. X. and others
+      Judul   : Automatic acne object detection and acne severity grading using smartphone images and artificial intelligence
+      File PDF: Automatic Acne Object Detection and Acne Severity Grading Using Smartphone Images and Artificial Intelligence.pdf
+      Lokasi  : Kajian-Pustaka.tex:18
+
+[ADA] islam2023
+      Penulis : Islam, M. B. and others
+      Judul   : Acne vulgaris detection and classification - A dual integrated deep CNN model
+      File PDF: Acne Vulgaris Detection and Classification - A Dual Integrated Deep CNN Model.pdf
+      Lokasi  : Kajian-Pustaka.tex:40
+
+[ADA] jain2021
+      Penulis : Jain, Saumya and Singhania, Unnati and Tripathy, Brijesh and others
+      Judul   : Deep Learning-Based Transfer Learning for Classification of Skin Cancer
+      File PDF: Deep Learning-Based Transfer Learning for Classification of Skin Cancer.pdf
+      Lokasi  : Kajian-Pustaka.tex:40, Kajian-Pustaka.tex:40, Kajian-Pustaka.tex:40, Kajian-Pustaka.tex:43, Kajian-Pustaka.tex:43, Kajian-Pustaka.tex:45, Kajian-Pustaka.tex:45, Kajian-Pustaka.tex:45, Pendahuluan.tex:12
+
+[ADA] jeong2023
+      Penulis : Jeong, Hyo-Eun and Park, Changha and Henao, Ricardo and Kheterpal, Meenal
+      Judul   : Deep Learning in Dermatology: A Systematic Review of Current Approaches, Outcomes, and Limitations
+      File PDF: Deep Learning in Dermatology - A Systematic Review of Current Approaches, Outcomes, and Limitations.pdf
+      Lokasi  : Kajian-Pustaka.tex:7, Kajian-Pustaka.tex:7, Kajian-Pustaka.tex:7, Kajian-Pustaka.tex:7, Kajian-Pustaka.tex:9, Kajian-Pustaka.tex:9, Kajian-Pustaka.tex:9, Kajian-Pustaka.tex:43, Kajian-Pustaka.tex:43, Pendahuluan.tex:6, Pendahuluan.tex:6, Pendahuluan.tex:8, Pendahuluan.tex:12
+
+[ADA] lin2022
+      Penulis : Lin, Yilong and Jiang, Jialun and Ma, Zheyuan and others
+      Judul   : KIEGLFN: A unified acne grading framework on face images
+      File PDF: KIEGLFN - A unified acne grading framework on face images.pdf
+      Lokasi  : Kajian-Pustaka.tex:23, Kajian-Pustaka.tex:23, Kajian-Pustaka.tex:23, Kajian-Pustaka.tex:28, Kajian-Pustaka.tex:29, Kajian-Pustaka.tex:55, Kajian-Pustaka.tex:101, Kajian-Pustaka.tex:129, Pendahuluan.tex:10, Pendahuluan.tex:14
+
+[ADA] liu2022
+      Penulis : Liu, Siyuan and Fan, Yibo and Duan, Ming and others
+      Judul   : AcneGrader: An ensemble pruning of the deep learning base models to grade acne
+      File PDF: AcneGrader - An ensemble pruning of the deep learning base models to grade acne.pdf
+      Lokasi  : Kajian-Pustaka.tex:65, Kajian-Pustaka.tex:65, Kajian-Pustaka.tex:65, Kajian-Pustaka.tex:67, Kajian-Pustaka.tex:69, Kajian-Pustaka.tex:70, Kajian-Pustaka.tex:101, Kajian-Pustaka.tex:131, Pendahuluan.tex:14
+
+[ADA] lopez2023
+      Penulis : Lopez, J.
+      Judul   : Acne Severity Grading Utilizing an Attention Mechanism Guided Deep Regression
+      File PDF: Acne Severity Grading Utilizing an Attention Mechanism Guided Deep Regression.pdf
+      Lokasi  : Kajian-Pustaka.tex:12, Kajian-Pustaka.tex:23, Kajian-Pustaka.tex:23, Pendahuluan.tex:10, Pendahuluan.tex:14
+
+[ADA] mobilenet2024
+      Penulis : TIM Peneliti Indonesia
+      Judul   : Analisis komparatif arsitektur MobileNet untuk klasifikasi tipe jerawat pada citra wajah
+      File PDF: Analisis Komparatif Arsitektur MobileNet untuk Klasifikasi Tipe Jerawat pada Citra Wajah.pdf
+      Lokasi  : Kajian-Pustaka.tex:83, Kajian-Pustaka.tex:83, Kajian-Pustaka.tex:85, Kajian-Pustaka.tex:85, Kajian-Pustaka.tex:87, Kajian-Pustaka.tex:88
+
+[ADA] qu2026
+      Penulis : Qu, L. and others
+      Judul   : A coarse-to-fine framework for facial acne grading and lesion counting
+      File PDF: A coarse-to-fine framework for facial acne grading and lesion counting.pdf
+      Lokasi  : Kajian-Pustaka.tex:28
+
+[ADA] suriani2023
+      Penulis : Suriani, N. S. and others
+      Judul   : Convolutional Neural Network untuk mengklasifikasi tingkat keparahan jerawat
+      File PDF: Convolutional Neural Network untuk mengklasifikasi tingkat keparahan jerawat.pdf
+      Lokasi  : Kajian-Pustaka.tex:103, Kajian-Pustaka.tex:133
+
+[ADA] suriani2024
+      Penulis : Suriani, N. S. and Tarmizi, S. S. A. and others
+      Judul   : Acne severity classification on mobile devices using lightweight deep learning approach
+      File PDF: Acne Severity Classification on Mobile Devices using Lightweight Deep Learning Approach.pdf
+      Lokasi  : Kajian-Pustaka.tex:85
+
+[ADA] tan2019efficientnet
+      Penulis : Tan, Mingxing and Le, Quoc V.
+      Judul   : EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks
+      File PDF: EfficientNet Rethinking Model Scaling for Convolutional Neural Networks.pdf
+      Lokasi  : Kajian-Pustaka.tex:74
+
+[ADA] vut2025
+      Penulis : Vuthipadadorn, P. and others
+      Judul   : Systematic Optimization of Transfer Learning for Acne Severity Classification Using Restricted, Imbalanced and Non-Public Facial Images - An Experimental Study
+      File PDF: Systematic Optimization of Transfer Learning for Acne Severity Classification Using Restricted, Imbalanced and Non-Public Facial Images - An Experimental Study.pdf
+      Lokasi  : Kajian-Pustaka.tex:12, Kajian-Pustaka.tex:65, Kajian-Pustaka.tex:67, Kajian-Pustaka.tex:69
+
+[ADA] wang2023
+      Penulis : Wang, J. and Wang, C. and Wang, Z. and others
+      Judul   : A novel automatic acne detection and severity quantification scheme using deep learning
+      File PDF: A novel automatic acne detection and severity quantification scheme using deep learning.pdf
+      Lokasi  : Kajian-Pustaka.tex:19
+
+[ADA] watanabe2025
+      Penulis : Watanabe, K. and Yamashita, T. and Hashimoto, M. and Tanaka, Y.
+      Judul   : Deep learning-based acne severity classification using standardized facial images of Japanese patients
+      File PDF: Deep Learning-Based Acne Severity Classification Using Standardized Facial Images of Japanese Patients.pdf
+      Lokasi  : Kajian-Pustaka.tex:17, Kajian-Pustaka.tex:27, Kajian-Pustaka.tex:74
+
+[ADA] web_mobilenet2026
+      Penulis : Guntara, A. and Sitepu, E. M. B.
+      Judul   : Implementasi MobileNetV2 untuk klasifikasi jenis Acne Vulgaris pada platform website
+      File PDF: Implementasi MobileNetV2 untuk Klasifikasi Jenis Acne Vulgaris pada Platform Website.pdf
+      Lokasi  : Kajian-Pustaka.tex:83, Kajian-Pustaka.tex:85, Kajian-Pustaka.tex:87
+
+[ADA] wu2019
+      Penulis : Wu, Xiaoping and Wen, Ning and Liang, Jie and others
+      Judul   : Joint Acne Image Grading and Counting via Label Distribution Learning
+      File PDF: Joint Acne Image Grading and Counting via Label Distribution Learning.pdf
+      Lokasi  : Kajian-Pustaka.tex:16, Kajian-Pustaka.tex:16, Kajian-Pustaka.tex:27, Kajian-Pustaka.tex:55, Kajian-Pustaka.tex:65, Kajian-Pustaka.tex:70, Kajian-Pustaka.tex:99, Kajian-Pustaka.tex:99, Kajian-Pustaka.tex:127, Pendahuluan.tex:14, Pendahuluan.tex:14
+
+[ADA] yu2023
+      Penulis : Yu, R. and Fei, W. and Ning, X. and Cui, Y.
+      Judul   : Comparisons of four acne grading systems recommended in China, Korea, and Japan
+      File PDF: Comparisons of Four Acne Grading Systems Recommended in China, Korea, and Japan.pdf
+      Lokasi  : Kajian-Pustaka.tex:19, Kajian-Pustaka.tex:23
+
+[ADA] zeng2026
+      Penulis : Zeng, S. and Kalaycioglu, S. and Hong, C. and Xie, H.
+      Judul   : Interpretable Image-Level Acne Severity Grading via EfficientNet-B0 Transfer Learning and Grad-CAM
+      File PDF: Interpretable Image-Level Acne Severity Grading via EfficientNet-B0 Transfer Learning and Grad-CAM - An Open, Cross-Platform Reference Implementation Validated on the ACNE04 Benchmark.pdf
+      Lokasi  : Kajian-Pustaka.tex:40, Kajian-Pustaka.tex:51, Kajian-Pustaka.tex:55, Kajian-Pustaka.tex:55, Kajian-Pustaka.tex:55, Kajian-Pustaka.tex:74, Kajian-Pustaka.tex:74, Kajian-Pustaka.tex:76, Kajian-Pustaka.tex:76, Kajian-Pustaka.tex:76, Kajian-Pustaka.tex:78, Kajian-Pustaka.tex:79, Kajian-Pustaka.tex:88, Kajian-Pustaka.tex:103, Kajian-Pustaka.tex:135
+
+
+==========================================================================================
+--- 2. CITATIONS YANG BELUM ADA FILE PDF-NYA DI docs/references ---
+
+==========================================================================================
+--- 3. FILE PDF DI docs/references YANG BELUM DISITASI DI PAPER ---
+- Acne Severity Classification Study Using Convolutional Neural Network Algorithm with MobileNetV2 Architecture.pdf
+- Automated Classification of Skin Diseases Using CNNs and Outbreak Implications.pdf
+- Automated grading of acne vulgaris by deep learning with convolutional neural networks.pdf
+- Classification of Acne Severity Using K-Nearest Neighbor (KNN) and Random Forest Methods.pdf
+- Decoupled Sequential Detection Head for accurate acne detection.pdf
+- Development and accuracy of an artificial intelligence algorithm for acne grading from smartphone photographs.pdf
+- Hybrid Attention-Guided Capsule Framework for Automated Facial Acne Severity Classification.pdf
+- Implementasi Vision Transformer untuk Klasifikasi Jenis Jerawat pada Citra Wajah Berbasis Web.pdf
+- MCANet - Hierarchical cross-fusion lightweight transformer based on multi-ConvHead attention for object detection.pdf
+- Optimizing Acne Severity Detection - A Deep Learning Approach with Electronic Medical Record System Integration and Diverse Image Data.pdf
+- Pigmented skin disease classification via deep learning with an attention mechanism.pdf
+- SS-ALDL - Consistency-based semi-supervised label distribution learning for acne severity classification.pdf
