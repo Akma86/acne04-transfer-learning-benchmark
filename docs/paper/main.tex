@@ -1,0 +1,167 @@
+ %% This document is created by 
+%%  Dr. Putu Harry Gunawan
+%% Template untuk Proposal TA 1 dan TA
+%% Template ini digunakan untuk penulisan proposal TA 1 atau TA Fakultas Informatika, Telkom University.
+%%  New Update 28 Pebruari 2017 : Bookmarks pdf, Pembimbing hanya satu
+
+\documentclass[a4paper,12pt,oneside]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{sectsty}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{array}
+\usepackage[table]{xcolor}
+\definecolor{headerblue}{RGB}{20, 60, 110}
+\definecolor{boxbgblue}{RGB}{245, 249, 254}
+\definecolor{borderblue}{RGB}{70, 130, 180}
+\definecolor{sysborder}{RGB}{35, 100, 160}
+\definecolor{sysbg}{RGB}{252, 254, 255}
+\usepackage{anysize}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[bahasa]{babel}
+\usepackage{indentfirst} %Spasi untuk paragraf pertama
+\usepackage{geometry}
+\usepackage{multirow}% http://ctan.org/pkg/multirow
+\usepackage{hhline}% http://ctan.org/pkg/hhline
+\marginsize{4cm}{3cm}{3cm}{3cm} %{left}{right}{top}{bottom}
+\usepackage[compact]{titlesec} 
+\usepackage[numbers]{natbib} %for numerical IEEE/plain style
+\usepackage[bookmarks,hypertexnames=false,debug]{hyperref}
+%\usepackage[pageanchor]{hyperref}
+\usepackage{bookmark}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{makecell}
+
+
+\makeatletter
+\patchcmd{\ttlh@hang}{\parindent\z@}{\parindent\z@\leavevmode}{}{}
+\patchcmd{\ttlh@hang}{\noindent}{}{}{}
+\makeatother
+
+\chapterfont{\centering}
+\newcommand{\bigsize}{\fontsize{16pt}{14pt}\selectfont}
+\chapterfont{\centering\bigsize\bfseries}
+\sectionfont{\large\bfseries}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, arrows.meta, positioning, fit, backgrounds, calc}
+%\renewcommand{\chaptertitle}{BAB}
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand\thesection{\arabic{chapter}.\arabic{section}}
+\renewcommand\thesubsection{\thesection.\arabic{subsection}}
+\renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
+\renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+\renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
+
+\renewcommand\bibname{Daftar Pustaka}
+\addto{\captionsbahasa}{\renewcommand{\bibname}{Daftar Pustaka}}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Berikut adalah data-data yang wajib diisi oleh mahasiswa
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Perbandingan Arsitektur Transfer Learning untuk Klasifikasi Tingkat Keparahan Jerawat}\let\Title\@title   %Judul dalam bahasa Indonesia
+
+\newcommand{\EngTitle}{Comparison of Transfer Learning Architectures for Acne Severity Classification}  %Judul dalam bahasa Inggris
+
+\author{Akmal Yaasir Fauzaan}  \let\Author\@author  %Nama mhs
+\newcommand{\NIM}{103052300008}
+\newcommand{\Prodi}{Sains Data}
+\newcommand{\KK}{Modelling Computational Experiment} %UNTUK TA
+\newcommand{\Gelar}{Sains Data} % UNTUK TA
+\date{2026}           \let\Date\@date %Masukkan hanya tahun saja
+\newcommand{\Tanggal}{4} % Tanggal Pengesahan
+\newcommand{\Bulan}{September} % Bulan Pengesahan
+\newcommand{\PembimbingSatu}{Dr. Putu Harry Gunawan, S.Si., M.Si., M.Sc.}
+\newcommand{\NIPPembimbingSatu}{16860043-1}
+\newcommand{\PembimbingDua}{Ahmad Bintang Arif, S.Kom., M.Kom.}
+\newcommand{\NIPPembimbingDua}{26020013}
+\newcommand{\Kaprodi}{Dr. Ketua Program Studi}
+\newcommand{\NIPKaprodi}{95650581-1}
+\newif\ifPembimbingHanyaSatu
+
+%%%% WARNING kode berikut ini diaktifkan Jika pembimbing hanya satu %%%%
+
+%\PembimbingHanyaSatutrue
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatother
+\linespread{1}
+
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dimulai dengan cover, lembar persetujuan, Abstrak, dll
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{roman}
+\begin{titlepage}
+    \thispagestyle{empty}
+    %\vspace*{0.7cm}
+    \pdfbookmark{Cover}{ }
+    \include{Cover}
+    \pagebreak
+    \thispagestyle{empty}
+    \pdfbookmark{Lembar Persetujuan}{ }
+    \include{Lembar-Persetujuan}
+    \pagebreak
+\end{titlepage}
+\phantomsection
+\addcontentsline{toc}{chapter}{Abstrak}
+%\pdfbookmark{\abstractname}{Abstrak Indonesia}
+\include{Abstrak-Indo}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Daftar Isi}
+%\pdfbookmark{\contentsname}{Contents}
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bab bab penulisan
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage
+\pagenumbering{arabic}
+\include{Pendahuluan}
+%
+\include{Kajian-Pustaka}
+%
+\include{Metodologi}
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Berikut adalah untuk membuat Daftar pustaka
+% Style daftar pustaka dapat disesuaikan dengan mengubah 
+%\bibliographystyle{kode}
+% dengan kode = acm maka hasinya contoh [1]
+% dengan kode = agsm maka hasilnya Harvard style (Sukimin, 2017)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Daftar Pustaka}
+\bibliographystyle{plain} %harvard style
+\bibliography{References}
+%
+%\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Berikut untuk lampiran
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Lampiran}
+\include{Lampiran}
+\end{document}

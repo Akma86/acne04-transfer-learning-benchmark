@@ -69,9 +69,33 @@ docs/*
 !docs/references/
 docs/references/*
 !docs/references/.gitkeep
+
+# Proposal Paper & Thesis (LaTeX)
 !docs/paper/
 docs/paper/*
 !docs/paper/.gitkeep
+!docs/paper/*.tex
+!docs/paper/*.bib
+!docs/paper/*.txt
+!docs/paper/*.pdf
+!docs/paper/*.png
+!docs/paper/Gambar/
+!docs/paper/Gambar/*
+docs/paper/build/
+docs/paper/*.aux
+docs/paper/*.bbl
+docs/paper/*.blg
+docs/paper/*.log
+docs/paper/*.toc
+docs/paper/*.out
+docs/paper/*.synctex.gz
+docs/paper/*.fls
+docs/paper/*.fdb_latexmk
+
+# Local scratch and knowledge graph outputs
+scratch/
+graphify-out/
+.agents/
 
 # ==============================================================================
 # OS & Editor specific files

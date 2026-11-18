@@ -47,7 +47,8 @@ class ACNE04Dataset(Dataset):
 
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, int]:
         row = self.metadata_df.iloc[idx]
-        image_path = self.root_dir / row["relative_path"]
+        rel_col = "relative_path" if "relative_path" in self.metadata_df.columns else "filepath"
+        image_path = self.root_dir / row[rel_col]
 
         image = Image.open(image_path).convert("RGB")
         label = int(row["label"])

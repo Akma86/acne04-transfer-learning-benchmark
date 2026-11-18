@@ -4,10 +4,11 @@ seed: 42
 
 # Dataset Configuration
 dataset:
-  raw_dir: "data/raw/acne_1024"
+  raw_dir: "data/raw/acne04"
   metadata_csv: "data/metadata/acne04_metadata.csv"
   num_classes: 4
-  class_names: ["Level 0 (Normal)", "Level 1 (Mild)", "Level 2 (Moderate)", "Level 3 (Severe)"]
+  class_names: ["0", "1", "2", "3"]
+  hayashi_labels: ["Mild", "Moderate", "Severe", "Very Severe"]
   image_size: 224 # 224 standard, 384 for ViT-Large
   batch_size: 32
   num_workers: 2

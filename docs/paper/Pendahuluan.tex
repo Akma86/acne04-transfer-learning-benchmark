@@ -1,0 +1,170 @@
+% !TEX root = main.tex
+\chapter{Pendahuluan}
+
+\section{Latar Belakang}
+
+Jerawat (\textit{acne vulgaris}) merupakan gangguan dermatologis inflamasi kronis yang menyerang unit pilosebaseus pada kulit, ditandai dengan munculnya berbagai lesi kutaneus yang kompleks dan bervariasi \cite{jeong2023}. Secara epidemiologis, jerawat merupakan salah satu penyakit kulit paling prevalen di dunia yang menginfeksi lebih dari 85\% populasi remaja dan dewasa muda, serta sering kali bertahan hingga usia dewasa \cite{jeong2023}.
+
+Dampak yang ditimbulkan oleh jerawat tidak terbatas pada manifestasi fisik kutaneus semata. Secara fisik, inflamasi berat yang tidak ditangani secara tepat sering kali menyebabkan kerusakan jaringan dermis yang permanen dan memicu terbentuknya jaringan parut maupun hiperpigmentasi pasca inflamasi \cite{jeong2023}. Selain itu, penderita jerawat juga dapat mengalami gangguan psikologis berupa penurunan rasa percaya diri, kecemasan, hingga depresi.
+
+Penentuan tingkat keparahan jerawat (\textit{acne severity grading}) merupakan aspek penting dalam proses diagnosis dan penentuan terapi \cite{hayashi2008,lopez2023}. Saat ini proses penilaian masih banyak dilakukan secara manual oleh dokter spesialis kulit melalui observasi visual dan perhitungan jumlah lesi. Metode ini membutuhkan waktu yang relatif lama serta rentan terhadap subjektivitas antar pemeriksa \cite{lin2022}.
+
+Perkembangan teknologi \textit{deep learning}, yang diawali oleh \textit{Convolutional Neural Network} (CNN) hingga arsitektur mutakhir berbasis \textit{Vision Transformer} (ViT) dan \textit{Vision Foundation Models}, telah menunjukkan performa yang sangat impresif dalam berbagai tugas analisis citra medis \cite{jeong2023,dosovitskiy2020image,simeoni2025dinov3}. Namun, keterbatasan jumlah data medis sering menyebabkan pelatihan model \textit{from scratch} mengalami \textit{overfitting}. Oleh karena itu, pendekatan \textit{transfer learning} banyak digunakan untuk memanfaatkan representasi visual kaya yang telah dipelajari oleh model berskala besar melalui \textit{self-supervised pre-training} \cite{jain2021,simeoni2025dinov3}.
+
+Dalam penelitian klasifikasi tingkat keparahan jerawat, dataset ACNE04 merupakan salah satu dataset acuan yang paling banyak digunakan \cite{wu2019}. Pada penelitian ini digunakan rilis terbuka kanonik \texttt{Layered-Labs/ACNE04} di \href{https://huggingface.co/datasets/Layered-Labs/ACNE04}{Hugging Face} yang merekonstruksi secara utuh korpus asli ACNE04 sebanyak $1.457$ citra wajah dengan label empat tingkat keparahan menurut kriteria Hayashi (Level 0: \textit{Mild}, Level 1: \textit{Moderate}, Level 2: \textit{Severe}, dan Level 3: \textit{Very Severe}) \cite{wu2019, layeredlabs2026acne04}. Ilustrasi sampel citra pada setiap tingkatan tersebut dirinci lebih lanjut pada Bab III. Berbagai penelitian telah dilakukan pada dataset ini menggunakan pendekatan yang berbeda, seperti \textit{Label Distribution Learning}, \textit{Global-Local Fusion Network}, \textit{Ensemble CNN}, maupun pendekatan berbasis regresi \cite{wu2019,lin2022,liu2022,alzahrani2022,lopez2023}.
+
+Meskipun demikian, penelitian sebelumnya menunjukkan bahwa performa model sangat dipengaruhi oleh arsitektur yang digunakan. Sebagian besar literatur sebelumnya masih terfokus pada arsitektur CNN konvensional dan belum mengeksplorasi potensi \textit{Vision Foundation Model} berbasis \textit{self-supervised learning} mutakhir pada dataset ACNE04. Di antara berbagai keluarga \textit{vision foundation model}, DINOv3 dipilih karena \textit{self-supervised pre-training} pada korpus LVD-1689M yang disertai mekanisme \textit{Gram anchoring} mampu menjaga ketajaman fitur spasial lokal untuk mikrolesi kulit sekaligus konteks global wajah secara simultan \cite{simeoni2025dinov3}. Selain itu, hasil antar-penelitian terdahulu sulit dibandingkan secara langsung karena perbedaan metode, strategi pelatihan, dan konfigurasi data. Oleh karena itu, diperlukan penelitian yang membandingkan performa model \textit{transfer learning} berbasis \textit{Vision Transformer} pada dataset ACNE04 menggunakan skenario eksperimen yang seragam dan terkontrol.
+
+Berdasarkan permasalahan tersebut, penelitian ini melakukan perbandingan dua skala ekstrem model \textit{transfer learning} dalam satu keluarga arsitektur \textit{Vision Transformer} (DINOv3), yaitu kategori \textit{heavyweight} (DINOv3 ViT-L/16 dengan $\approx 304$ juta parameter sebagai batas atas komputasi GPU tunggal yang realistis) dan kategori \textit{lightweight} (DINOv3 ViT-S/16 dengan $\approx 21,6$ juta parameter yang sebanding dengan kompleksitas CNN klinis) \cite{simeoni2025dinov3}, untuk klasifikasi tingkat keparahan jerawat pada dataset ACNE04. Hasil penelitian diharapkan dapat memberikan rekomendasi empiris mengenai pemilihan model terbaik beserta \textit{trade-off} akurasi dan efisiensi komputasi bagi pengembangan sistem diagnosis jerawat berbasis kecerdasan buatan.
+
+\section{Perumusan Masalah}
+
+Berdasarkan latar belakang yang telah diuraikan, rumusan masalah dalam penelitian ini adalah sebagai berikut:
+
+\begin{itemize}
+    \item Bagaimana implementasi model \textit{transfer learning} dengan arsitektur DINOv3 ViT-L/16 (\textit{heavyweight}, $\approx 304\text{M}$ parameter) dan DINOv3 ViT-S/16 (\textit{lightweight}, $\approx 21,6\text{M}$ parameter) untuk klasifikasi tingkat keparahan jerawat pada dataset ACNE04?
+    
+    \item Bagaimana kinerja model \textit{transfer learning} DINOv3 ViT-L/16 dan DINOv3 ViT-S/16 dalam klasifikasi tingkat keparahan jerawat berdasarkan metrik \textit{Accuracy}, \textit{Macro Precision}, \textit{Macro Recall}, \textit{Macro F1-Score}, dan \textit{Quadratic Weighted Kappa} (QWK)?
+    
+    \item Bagaimana pemilihan model \textit{transfer learning} terbaik yang memberikan \textit{trade-off} optimal antara akurasi diagnostik dan efisiensi komputasi pada dataset ACNE04?
+\end{itemize}
+
+\section{Tujuan}
+
+Tujuan yang ingin dicapai dalam penelitian ini adalah sebagai berikut:
+
+\begin{itemize}
+    \item Untuk mengimplementasikan model \textit{transfer learning} dengan arsitektur DINOv3 ViT-L/16 (\textit{heavyweight}) dan DINOv3 ViT-S/16 (\textit{lightweight}) pada dataset ACNE04 dalam mengklasifikasikan empat tingkat keparahan jerawat.
+    
+    \item Untuk menganalisis dan mengukur performansi klasifikasi yang dihasilkan oleh model DINOv3 ViT-L/16 dan DINOv3 ViT-S/16 berdasarkan metrik \textit{Accuracy}, \textit{Macro Precision}, \textit{Macro Recall}, \textit{Macro F1-Score}, dan \textit{Quadratic Weighted Kappa} (QWK).
+    
+    \item Untuk menentukan dan memilih model \textit{transfer learning} terbaik yang menghasilkan \textit{trade-off} optimal antara akurasi diagnostik dan efisiensi komputasi dalam klasifikasi tingkat keparahan jerawat pada dataset ACNE04.
+\end{itemize}
+
+\section{Batasan Masalah}
+
+Batasan masalah dalam penelitian ini adalah sebagai berikut:
+
+\begin{itemize}
+    \item Penelitian difokuskan pada klasifikasi tingkat keparahan jerawat menggunakan dataset ACNE04 yang terdiri dari empat tingkat keparahan berdasarkan standar Hayashi.
+    
+    \item Model yang digunakan dalam penelitian ini dibatasi pada arsitektur \textit{transfer learning} DINOv3 ViT-L/16 ($\approx 304\text{M}$ parameter) dan DINOv3 ViT-S/16 ($\approx 21,6\text{M}$ parameter) yang telah dilatih sebelumnya melalui \textit{self-supervised pre-training} pada korpus masif LVD-1689M (\textit{Vision Foundation Model}).
+    
+    \item Data yang digunakan hanya berupa citra wajah pada dataset ACNE04 tanpa menambahkan dataset eksternal lainnya.
+    
+    \item Proses \textit{training} dan pengujian model dilakukan menggunakan \textit{stratified data splitting} yang identik untuk seluruh model guna memastikan perbandingan performa yang terkontrol (\textit{head-to-head}).
+    
+    \item Evaluasi performa model dilakukan menggunakan metrik \textit{Accuracy}, \textit{Macro Precision}, \textit{Macro Recall}, \textit{Macro F1-Score}, \textit{Quadratic Weighted Kappa} (QWK), serta sensitivitas kelas ekstrem (Level 3).
+    
+    \item Penelitian berfokus pada perbandingan performa model klasifikasi dan tidak membahas interpretabilitas visual berbasis \textit{attention map} secara mendalam.
+    
+    \item Penelitian tidak membahas implementasi sistem pada perangkat \textit{mobile} maupun lingkungan \textit{real-time}.
+    
+    \item Penelitian tidak merancang arsitektur dasar baru \textit{from scratch}, melainkan berfokus pada adaptasi \textit{transfer learning} dan evaluasi komparatif performa model DINOv3 yang digunakan.
+\end{itemize}
+
+\section{Rencana Kegiatan}
+
+Tahapan kegiatan dalam proses pengerjaan tugas akhir ini adalah sebagai berikut:
+
+\begin{itemize}
+
+\item \textbf{Studi Literatur}
+
+Mengkaji penelitian terdahulu yang berkaitan dengan klasifikasi tingkat keparahan jerawat menggunakan \textit{deep learning}, \textit{transfer learning}, serta dataset ACNE04. Kajian juga dilakukan terhadap arsitektur \textit{Vision Transformer} (ViT), \textit{vision foundation model} DINOv3 (khususnya varian ViT-L/16 dan ViT-S/16), serta metrik evaluasi yang umum digunakan pada tugas klasifikasi citra medis ordinal.
+
+\item \textbf{Pengumpulan dan Persiapan Data}
+
+Mengumpulkan dan menganalisis karakteristik dataset ACNE04 yang digunakan dalam penelitian. Tahap ini mencakup verifikasi data, pemetaan label tingkat keparahan jerawat, \textit{stratified data splitting} untuk pembagian \textit{Train Set}, \textit{Validation Set}, dan \textit{Test Set}, serta penerapan teknik \textit{preprocessing} dan augmentasi citra yang diperlukan.
+
+\item \textbf{Perancangan dan Implementasi Model}
+
+Merancang sistem klasifikasi keparahan jerawat berbasis \textit{transfer learning}. Implementasi dilakukan pada model DINOv3 ViT-L/16 dan DINOv3 ViT-S/16 dengan memanfaatkan \textit{pre-trained weights} DINOv3.
+
+\item \textbf{\textit{Model Training} dan Evaluasi}
+
+Melakukan proses \textit{training} dan pengujian pada masing-masing model menggunakan dataset ACNE04. Evaluasi dilakukan menggunakan metrik \textit{Accuracy}, \textit{Macro Precision}, \textit{Macro Recall}, \textit{Macro F1-Score}, dan \textit{Quadratic Weighted Kappa} (QWK) untuk mengukur performa klasifikasi dan konsistensi prediksi ordinal setiap model.
+
+\item \textbf{Analisis Hasil dan Penyusunan Laporan}
+
+Menganalisis hasil eksperimen dan membandingkan performa kedua model \textit{transfer learning} yang digunakan. Selanjutnya dilakukan penyusunan laporan tugas akhir yang mencakup dokumentasi metode, hasil penelitian, analisis, dan kesimpulan.
+
+\end{itemize}
+
+\section{Jadwal Kegiatan}
+
+\newcolumntype{W}{>{\centering\arraybackslash}p{0.27cm}}
+\newcommand{\wk}{\cellcolor{blue!25}}
+
+\begin{table}[ht]
+\centering
+\caption{Jadwal Kegiatan Tugas Akhir}
+\small
+\renewcommand{\arraystretch}{1.3}
+\setlength{\tabcolsep}{1.5pt}
+
+\begin{tabular}{|c|p{2.6cm}|*{24}{W|}}
+\hline
+\multirow{2}{*}{\textbf{No}} &
+\multirow{2}{*}{\textbf{Kegiatan}} &
+\multicolumn{24}{c|}{\textbf{Bulan ke-}} \\ \cline{3-26}
+
+& & \multicolumn{4}{c|}{\textbf{1}}
+  & \multicolumn{4}{c|}{\textbf{2}}
+  & \multicolumn{4}{c|}{\textbf{3}}
+  & \multicolumn{4}{c|}{\textbf{4}}
+  & \multicolumn{4}{c|}{\textbf{5}}
+  & \multicolumn{4}{c|}{\textbf{6}} \\ \hline
+
+% 1. Studi Literatur: bulan 1-2
+1 & Studi Literatur
+& \wk & \wk & \wk & \wk
+& \wk & \wk & \wk & \wk
+& & & &
+& & & &
+& & & &
+& & & &
+\\ \hline
+
+% 2. Pengumpulan dan Persiapan Data: bulan 1-2
+2 & Pengumpulan dan Persiapan Data
+& \wk & \wk & \wk & \wk
+& \wk & \wk & \wk & \wk
+& & & &
+& & & &
+& & & &
+& & & &
+\\ \hline
+
+% 3. Perancangan dan Implementasi Model: bulan 2-4
+3 & Perancangan dan Implementasi Model
+& & & &
+& \wk & \wk & \wk & \wk
+& \wk & \wk & \wk & \wk
+& \wk & \wk & \wk & \wk
+& & & &
+& & & &
+\\ \hline
+
+% 4. Model Training dan Evaluasi: bulan 3-5
+4 & \textit{Model Training} dan Evaluasi
+& & & &
+& & & &
+& \wk & \wk & \wk & \wk
+& \wk & \wk & \wk & \wk
+& \wk & \wk & \wk & \wk
+& & & &
+\\ \hline
+
+% 5. Analisis Hasil dan Penyusunan Laporan: bulan 4-6
+5 & Analisis Hasil dan Penyusunan Laporan
+& & & &
+& & & &
+& & & &
+& \wk & \wk & \wk & \wk
+& \wk & \wk & \wk & \wk
+& \wk & \wk & \wk & \wk
+\\ \hline
+
+\end{tabular}
+\end{table}

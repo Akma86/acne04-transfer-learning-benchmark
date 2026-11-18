@@ -5,6 +5,7 @@ import numpy as np
 import seaborn as sns
 from sklearn.metrics import (
     accuracy_score,
+    cohen_kappa_score,
     confusion_matrix,
     f1_score,
     mean_absolute_error,
@@ -17,15 +18,12 @@ def compute_classification_metrics(
     y_true: List[int] | np.ndarray,
     y_pred: List[int] | np.ndarray,
 ) -> Dict[str, float]:
-    """Computes comprehensive evaluation metrics for multi-class acne severity grading.
-
-    Includes:
-    - Overall Top-1 Accuracy
-    - Macro-averaged Precision, Recall, and F1-Score (essential for imbalanced classes)
-    - Mean Absolute Error (MAE): reflects ordinal distance error between grades (0, 1, 2, 3)
-    """
+    """Computes evaluation metrics for ordinal 4-level acne severity grading."""
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
+    class3_rec = recall_score(
+        y_true, y_pred, labels=[3], average=None, zero_division=0
+    )[0]
 
     metrics = {
         "accuracy": float(accuracy_score(y_true, y_pred)),
@@ -37,6 +35,10 @@ def compute_classification_metrics(
         "macro_recall": float(
             recall_score(y_true, y_pred, average="macro", zero_division=0)
         ),
+        "qwk": float(
+            cohen_kappa_score(y_true, y_pred, labels=[0, 1, 2, 3], weights="quadratic")
+        ),
+        "class3_recall": float(class3_rec),
         "mae": float(mean_absolute_error(y_true, y_pred)),
     }
     return metrics
@@ -50,14 +52,10 @@ def plot_confusion_matrix(
 ):
     """Plots and optionally saves a normalized confusion matrix heatmap."""
     if class_names is None:
-        class_names = [
-            "Level 0 (Normal)",
-            "Level 1 (Mild)",
-            "Level 2 (Moderate)",
-            "Level 3 (Severe)",
-        ]
+        # Numeric level labels (0-3) align directly with Tabel 3.1.
+        class_names = ["0", "1", "2", "3"]
 
-    cm = confusion_matrix(y_true, y_pred, normalize="true")
+    cm = confusion_matrix(y_true, y_pred, labels=[0, 1, 2, 3], normalize="true")
 
     plt.figure(figsize=(8, 6))
     sns.heatmap(
@@ -70,12 +68,12 @@ def plot_confusion_matrix(
         cbar=False,
     )
     plt.title(
-        "Normalized Confusion Matrix (Acne Severity)",
+        "Normalized Confusion Matrix (Acne Severity Level)",
         fontweight="bold",
         pad=12,
     )
-    plt.xlabel("Predicted Class")
-    plt.ylabel("True Ground Truth")
+    plt.xlabel("Predicted Level")
+    plt.ylabel("True Level")
     plt.tight_layout()
 
     if save_path:

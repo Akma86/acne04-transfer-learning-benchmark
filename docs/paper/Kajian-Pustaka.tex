@@ -1,0 +1,219 @@
+\chapter{Kajian Pustaka}
+\label{bab:kajianpustaka}
+
+\section{Klasifikasi Tingkat Keparahan Jerawat}
+
+\subsection{Konsep dan Etiologi Jerawat}
+Jerawat (\textit{acne vulgaris}) merupakan penyakit kulit inflamasi kronis yang menyerang unit pilosebaseus pada kulit, ditandai oleh terbentuknya lesi polimorfik yang bervariasi \cite{jeong2023}. Penyakit kulit ini merupakan salah satu kondisi medis paling umum dijumpai secara global, menyerang lebih dari 85\% populasi remaja dan dewasa muda \cite{jeong2023}. Secara morfologis, lesi jerawat terbagi menjadi dua kategori utama: lesi non-inflamasi dan lesi inflamasi. Lesi non-inflamasi meliputi komedo terbuka (\textit{blackheads}) dan komedo tertutup (\textit{whiteheads}) yang disebabkan oleh penyumbatan folikel rambut oleh keratin dan sebum. Sementara itu, lesi inflamasi mencakup papula, pustula, nodul, dan kista yang terbentuk akibat reaksi peradangan lokal \cite{hayashi2008, jeong2023}. Patofisiologi jerawat bersifat kompleks dan multifaktorial, melibatkan empat proses utama: hiperproliferasi folikular epidermal, sekresi sebum berlebih yang dipicu oleh hormon androgen, kolonisasi mikroorganisme \textit{Cutibacterium acnes}, serta pelepasan mediator inflamasi perifer \cite{jeong2023}.
+
+Dampak yang ditimbulkan oleh penyakit jerawat meluas dari ranah fisik hingga ranah psikososial pasien. Dari perspektif fisik, peradangan jaringan dermis yang tidak ditangani secara adekuat berisiko tinggi menimbulkan pembentukan \textit{acne scars} yang permanen serta \textit{post-inflammatory hyperpigmentation} (PIH) \cite{jeong2023}. Fenomena PIH ini sangat menonjol pada individu dengan fototipe kulit gelap (Fitzpatrick IV--VI) \cite{jeong2023}. Dari perspektif psikososial, keberadaan jerawat derajat sedang hingga berat berkorelasi kuat dengan timbulnya \textit{social anxiety}, \textit{body image distress}, depresi, serta penurunan kualitas hidup dan percaya diri yang signifikan \cite{jeong2023}. Oleh karena itu, diagnosis medis yang cepat dan intervensi yang terukur menjadi sangat mendasar dalam pelayanan medis dermatologi.
+
+\subsection{\textit{Acne Severity Grading System}}
+Penetapan \textit{acne severity grading} secara sistematis merupakan tahapan klinis paling krusial dalam menentukan strategi terapi medis \cite{hayashi2008, lopez2023}. Pilihan terapi farmakologis sangat bergantung pada derajat keparahan yang terdiagnosa: jerawat derajat ringan umumnya ditangani dengan pemberian agen topikal (seperti retinoid atau asam azelaat), sedangkan jerawat derajat sedang hingga berat memerlukan pemberian antibiotik sistemik oral atau isotretinoin yang membutuhkan pemantauan ketat terhadap respons klinis dan efek samping \cite{hayashi2008, vut2025}.
+
+Dalam praktik klinis dan riset dermatologi secara global, terdapat beberapa sistem \textit{grading} standar yang dikembangkan oleh perhimpunan dokter spesialis kulit dan lembaga regulasi internasional. Kriteria Hayashi yang dikembangkan di Jepang menggunakan pendekatan kuantitatif berbasis penghitungan lesi inflamasi (papula dan pustula) pada separuh area wajah \cite{hayashi2008}. Skala ini mengelompokkan keparahan ke dalam empat tingkatan ordinal: \textit{Mild} atau Level 0 ($0$--$5$ lesi, mencakup $1$--$5$ lesi pada sampel klinis ACNE04), \textit{Moderate} atau Level 1 ($6$--$20$ lesi), \textit{Severe} atau Level 2 ($21$--$50$ lesi), serta \textit{Very Severe} atau Level 3 ($>50$ lesi) \cite{hayashi2008, wu2019}. Karena sifat pengelompokannya berbasis ambang kuantitatif yang objektif, Kriteria Hayashi dijadikan acuan utama anotasi \textit{ground-truth} pada dataset \textit{benchmark} publik ACNE04 \cite{wu2019, layeredlabs2026acne04}.
+
+Di luar pendekatan penghitungan lesi diskret, praktik klinis global juga mengadopsi sejumlah skala penilaian kualitatif dan topografis. Di Amerika Serikat, \textit{US Food and Drug Administration} (FDA) merekomendasikan skala \textit{Investigator's Global Assessment} (IGA) lima tingkat (\textit{Grade} 0 \textit{Clear} hingga \textit{Grade} 4 \textit{Severe}) sebagai standar evaluasi uji klinis \cite{watanabe2025}, sementara perhimpunan dermatologi Eropa menggunakan skala \textit{Global Evaluation Acne} (GEA) enam tingkat (\textit{Grade} 0--5) \cite{huynh2022}. Selain itu, beberapa studi regional memanfaatkan \textit{Global Acne Grading System} (GAGS) yang menerapkan pembobotan berdasarkan lokasi anatomis \cite{wang2023}, serta pedoman \textit{Acne Grading System} (AGS) dan IIGS pada praktik klinis di Tiongkok \cite{yu2023, gao2025}.
+
+\subsection{Karakteristik Data Citra dan Tantangan Klasifikasi}
+Meskipun \textit{grading} keparahan memiliki peran klinis yang sangat vital, proses evaluasi konvensional secara manual oleh dokter spesialis kulit (\textit{dermatologist}) menghadapi keterbatasan metodologis yang serius \cite{lopez2023, lin2022}. Inspeksi visual manual dengan menghitung lesi secara individual membutuhkan waktu lama (\textit{time-consuming}) serta \textit{labor-intensive} \cite{lopez2023}. Lebih lanjut, penilaian manusia bersifat sangat subjektif dan menunjukkan \textit{inter-observer variability} maupun \textit{intra-observer variability} yang tinggi \cite{lin2022}. Variabilitas ini dipengaruhi oleh tingkat pengalaman klinis, kecenderungan persepsi visual pribadi, kelelahan fisik, serta ketidakseragaman kondisi pencahayaan dan sudut pengambilan foto saat pemeriksaan \cite{lin2022, yu2023}.
+
+Dalam konteks \textit{computer vision} medis, otomatisasi klasifikasi keparahan jerawat menghadapi tantangan utama pada kontinuitas visual dan ambiguitas \textit{grade boundaries}. Perkembangan patologis lesi kulit berlangsung secara kontinu, sehingga citra yang terletak di sekitar batas transisi jumlah lesi (misalnya perbedaan antara 5 lesi pada Level 0 dan 6 lesi pada Level 1) memperlihatkan kemiripan visual yang tinggi dan kerap memicu ambiguitas label \cite{wu2019, watanabe2025}. Kondisi ini menuntut arsitektur klasifikasi yang peka terhadap gradasi visual halus antar-tingkat ordinal.
+
+Tantangan berikutnya adalah \textit{class imbalance} serta \textit{background clutter}. Secara epidemiologis, pasien berkondisi sangat parah (Level 3) berjumlah jauh lebih sedikit daripada kasus ringan maupun sedang, sehingga distribusi sampel pada dataset publik menjadi timpang dan berisiko menurunkan sensitivitas model terhadap kasus berat \cite{lin2022, qu2026}. Pada saat yang sama, elemen non-kulit seperti rambut, kerah pakaian, mata, bibir, dan variasi latar ruangan berpotensi membuat jaringan saraf tiruan mempelajari \textit{spurious features} apabila citra tidak melewati tahap \textit{preprocessing} yang terstandarisasi \cite{lin2022}.
+
+\subsection{Sintesis dan Relevansi dengan Penelitian}
+Keterbatasan dan subjektivitas pada penilaian manual serta kompleksitas karakteristik citra jerawat menegaskan perlunya sistem diagnosis otomatis yang objektif, konsisten, dan terukur. Penggunaan kriteria Hayashi sebagai standar klasifikasi pada dataset ACNE04 memberikan dasar kuantitatif yang tegas berdasarkan rentang jumlah lesi. Hal ini menjadi landasan penting dalam penelitian ini untuk mengevaluasi dan membandingkan keandalan berbagai arsitektur \textit{transfer learning} secara objektif berdasarkan metrik evaluasi yang sensitif terhadap gradasi ordinal dan \textit{class imbalance}.
+
+% -----------------------------------------------------------------------------
+
+\section{\textit{Deep Learning} dan \textit{Transfer Learning}}
+
+\subsection{Evolusi \textit{Deep Learning}: Dari CNN Menuju \textit{Vision Transformer}}
+\textit{Deep learning} telah menjadi paradigma utama dalam analisis citra medis otomatis karena kemampuannya dalam mengekstrak fitur secara mandiri langsung dari data mentah tanpa \textit{handcrafted features} \cite{jain2021, islam2023}. Pada awalnya, arsitektur \textit{Convolutional Neural Networks} (CNN) mendominasi domain visi komputer melalui operasi konvolusi lokal dengan sifat \textit{translation invariance} \cite{jain2021}. Namun, keterbatasan inheren dari CNN terletak pada \textit{receptive field} yang bersifat lokal, sehingga membutuhkan penumpukan banyak lapisan konvolusional untuk dapat menangkap relasi spasial jangka panjang antar-wilayah pada citra wajah \cite{dosovitskiy2020image}.
+
+Kehadiran arsitektur \textit{Vision Transformer} (ViT) yang dipelopori oleh Dosovitskiy et al. \cite{dosovitskiy2020image} menghadirkan pergeseran paradigma fundamental dalam pemrosesan visual. ViT mengadaptasi mekanisme \textit{multi-head self-attention} (MHSA) dari domain pemrosesan bahasa alami langsung ke data citra 2D dengan membagi citra masukan menjadi urutan \textit{image patches} non-tumpang tindih \cite{dosovitskiy2020image}. Mekanisme \textit{self-attention} memungkinkan setiap \textit{patch} citra berinteraksi secara global dengan seluruh \textit{patches} lainnya sejak lapisan pertama. Dalam analisis keparahan jerawat, kemampuan atensi global ini sangat menguntungkan karena penentuan tingkat keparahan Hayashi tidak hanya bergantung pada keberadaan satu lesi lokal, melainkan agregasi persebaran spasial lesi (papula, pustula, dan komedo) di seluruh kontur wajah secara holistik \cite{lin2022, simeoni2025dinov3}.
+
+\subsection{\textit{Vision Foundation Model} dan \textit{Self-Supervised Learning}}
+Tantangan mendasar dari arsitektur Transformer murni adalah ketiadaan \textit{inductive bias} lokal seperti yang dimiliki CNN, sehingga memerlukan volume data \textit{training} yang masif agar mampu menggeneralisasi dengan baik \cite{dosovitskiy2020image}. Terobosan mutakhir untuk mengatasi keterbatasan tersebut adalah paradigma \textit{Vision Foundation Models} (VFM) yang dilatih menggunakan pendekatan \textit{self-supervised learning} (SSL) \cite{oquab2023dinov2, simeoni2025dinov3}.
+
+Salah satu keluarga \textit{vision foundation model} paling mutakhir adalah DINOv3 yang dikembangkan oleh Meta AI Research \cite{simeoni2025dinov3}. Berbeda dengan model hasil \textit{supervised pre-training} konvensional (seperti ImageNet-1K) maupun generasi pendahulunya DINOv2 yang dilatih pada 142 juta citra (\textit{LVD-142M}) \cite{oquab2023dinov2}, DINOv3 menjalani \textit{self-supervised pre-training} pada korpus visual terkurasi skala masif \textit{LVD-1689M} ($\approx 1,69$ miliar citra) menggunakan kombinasi \textit{masked image modeling}, \textit{self-distillation}, \textit{axial Rotary Position Embedding} (RoPE), \textit{register tokens}, serta inovasi \textit{Gram anchoring} \cite{simeoni2025dinov3}. Teknik \textit{Gram anchoring} mencegah \textit{dense feature degradation} selama jadwal pelatihan panjang pada ViT skala besar \cite{simeoni2025dinov3}. Pendekatan ini menghasilkan representasi visual yang mempertahankan informasi semantik tingkat tinggi sekaligus rincian spasial beresolusi piksel padat, yang sangat penting untuk mendeteksi mikrolesi patologis pada citra dermatologis \cite{simeoni2025dinov3}.
+
+\subsection{Konsep \textit{Pre-trained Model} dan \textit{Transfer Learning}}
+Meskipun arsitektur jaringan saraf modern memiliki kapasitas pemodelan yang kuat, melatih model berukuran besar \textit{from scratch} pada dataset medis membutuhkan ketersediaan sampel berlabel dalam jumlah ratusan ribu hingga jutaan \cite{jain2021, jeong2023}. Dalam ranah klinis dermatologi, pengumpulan data terhambat oleh kerahasiaan medis pasien serta tingginya biaya anotasi oleh dokter spesialis kulit \cite{jeong2023, davila2024}. Mengoptimalkan model dari bobot acak pada dataset medis berskala moderat (seperti dataset ACNE04 dengan $1.457$ citra \cite{wu2019, layeredlabs2026acne04}) rentan menimbulkan \textit{overfitting} yang berat \cite{jain2021}.
+
+Paradigma \textit{transfer learning} (TL) hadir sebagai solusi utama untuk mengatasi keterbatasan volume data tersebut \cite{jain2021, davila2024}. Dalam \textit{transfer learning}, model menginisialisasi bobot menggunakan \textit{pre-trained weights} dari \textit{vision foundation model} berskala masif \cite{simeoni2025dinov3}. Bobot ini telah menginternalisasi representasi visual universal (seperti batas kontur, tekstur mikro, dan gradasi warna) yang dapat ditransfer ke domain target klinis jerawat, mempercepat konvergensi optimasi serta meningkatkan akurasi diagnostik secara signifikan \cite{davila2024}.
+
+\subsection{Adaptasi \textit{Transfer Learning}: \textit{Feature Extraction} vs. \textit{Fine-Tuning}}
+Adaptasi \textit{pre-trained weights} ke domain dermatologi umumnya ditempuh melalui dua paradigma pelatihan, yaitu \textit{linear probing} dan \textit{fine-tuning}. Pada skema \textit{linear probing}, seluruh parameter \textit{feature extractor} pada \textit{backbone} dipertahankan \textit{frozen} sementara pembaruan bobot hanya dilakukan pada \textit{linear classification head} \cite{davila2024}. Meskipun efisien secara komputasi, pendekatan ini sering kali kesulitan menyusun batas keputusan presisi ketika terdapat \textit{domain shift} yang signifikan antara citra alamiah korpus umum dan fotografi klinis kulit wajah \cite{davila2024}.
+
+Sebaliknya, pendekatan \textit{end-to-end fine-tuning} mengatur seluruh bobot lapisan jaringan menjadi \textit{unfrozen} untuk dioptimalkan secara serempak menggunakan \textit{learning rate} yang kecil dan terregularisasi \cite{davila2024}. Mekanisme adaptasi menyeluruh ini memungkinkan peta \textit{self-attention} di dalam \textit{backbone} bertransformasi agar lebih responsif dalam membedakan karakter tekstur halus antara eritema ringan dan pustula inflamasi berat \cite{zeng2026}.
+
+\subsection{Relevansi \textit{Transfer Learning} \textit{Vision Transformer} untuk Klasifikasi Jerawat}
+Penilaian keparahan jerawat merupakan tugas klasifikasi visual yang kompleks karena memerlukan integrasi simultan antara pengenalan tekstur mikrolesi lokal (pustula kecil berdiameter milimeter) dan persebaran lesi global pada seluruh wajah \cite{wu2019, lin2022}. Arsitektur \textit{Vision Foundation Model} DINOv3 sangat relevan untuk tugas ini karena mekanisme \textit{self-attention}-nya secara alamiah mampu mengombinasikan informasi konteks global wajah dengan atribut lokal lesi secara simultan \cite{simeoni2025dinov3}.
+
+\subsection{Sintesis dan Relevansi dengan Penelitian}
+Landasan teori \textit{transfer learning} berbasis \textit{Vision Foundation Models} melandasi perancangan eksperimen pada penelitian ini. Dengan menerapkan protokol \textit{fine-tuning} yang terstandarisasi pada dataset ACNE04, penelitian ini mengevaluasi secara empiris sejauh mana skala kapasitas \textit{vision foundation model} DINOv3 memengaruhi kinerja klasifikasi tingkat keparahan jerawat.
+
+% -----------------------------------------------------------------------------
+
+\section{Arsitektur Model \textit{Transfer Learning} \textit{Vision Transformer} (DINOv3)}
+
+\subsection{Konsep \textit{Vision Transformer} dan \textit{Multi-Head Self-Attention}}
+Arsitektur \textit{Vision Transformer} (ViT) beroperasi dengan membagi citra masukan 2D $\mathbf{X} \in \mathbb{R}^{H \times W \times C}$ menjadi urutan \textit{patches} berukuran $P \times P$ piksel non-tumpang tindih \cite{dosovitskiy2020image}. Jumlah \textit{patches} yang dihasilkan adalah $N = (H \cdot W) / P^2$. Setiap \textit{patch} diratakan (\textit{flattened}) dan diproyeksikan secara linear ke dalam ruang vektor berdimensi $d$ menggunakan matriks proyeksi terpelajar $\mathbf{E} \in \mathbb{R}^{(P^2 C) \times d}$, menghasilkan urutan token visual:
+\begin{equation}
+    \mathbf{z}_0 = [\mathbf{x}_{\text{class}}; \, \mathbf{x}_p^1 \mathbf{E}; \, \mathbf{x}_p^2 \mathbf{E}; \, \dots; \, \mathbf{x}_p^N \mathbf{E}] + \mathbf{E}_{\text{pos}}
+\end{equation}
+di mana $\mathbf{x}_{\text{class}}$ adalah token klasifikasi global \texttt{[CLS]} yang diposisikan di awal urutan, dan $\mathbf{E}_{\text{pos}}$ merepresentasikan \textit{positional embedding} untuk mempertahankan informasi koordinat spasial 2D \cite{dosovitskiy2020image}.
+
+Inti komputasi dari setiap blok Transformer Encoder adalah modul \textit{Multi-Head Self-Attention} (MHSA). Untuk setiap \textit{attention head}, tensor masukan diproyeksikan menjadi vektor \textit{Query} ($Q$), \textit{Key} ($K$), dan \textit{Value} ($V$):
+\begin{equation}
+    \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{Q K^T}{\sqrt{d_k}}\right) V
+\end{equation}
+di mana $d_k$ adalah dimensi proyeksi tiap \textit{attention head}. Matriks bobot hasil normalisasi \textit{softmax} tersebut merepresentasikan keterkaitan dinamis antarseluruh pasangan \textit{patches}, memungkinkan model menghubungkan lesi inflamasi yang tersebar di dahi, pipi, dan dagu secara simultan \cite{dosovitskiy2020image}.
+
+\subsection{Perbandingan Struktural DINOv3 ViT-L/16 dan ViT-S/16}
+Kerangka kerja DINOv3 menyediakan beberapa skala kapasitas arsitektur yang seluruhnya berbagi desain \textit{patch embedding} $16 \times 16$ piksel serta hasil \textit{self-supervised pre-training} pada korpus LVD-1689M yang diperkuat teknik \textit{Gram anchoring}, \textit{axial Rotary Position Embedding} (RoPE), dan \textit{register tokens} \cite{simeoni2025dinov3}. Varian \textit{heavyweight}, yaitu \textbf{DINOv3 ViT-L/16}, memiliki sekitar 304 juta parameter dengan dimensi \textit{embedding} $d=1.024$, kedalaman $L=24$ blok \textit{Transformer Encoder}, dan $h=16$ \textit{heads} paralel. Kapasitas representasi yang masif ini unggul dalam menangkap pola lesi kompleks dan menyebar pada seluruh area wajah, tetapi menuntut alokasi memori VRAM GPU serta regulasi optimasi yang ketat (seperti \textit{weight decay} dan penjadwalan \textit{learning rate} bertahap) untuk menghindari \textit{overfitting} pada dataset medis berukuran moderat \cite{simeoni2025dinov3}.
+
+Sebagai pasangan pembanding kategori \textit{lightweight}, \textbf{DINOv3 ViT-S/16} memangkas sekitar 93\% parameter hingga berjumlah $\approx 21,6$ juta parameter melalui kompresi lebar representasi ($d=384$), kedalaman 12 blok ($L=12$), dan 6 \textit{heads} ($h=6$) \cite{simeoni2025dinov3}. Arsitektur ringkas ini menawarkan kecepatan inferensi tinggi, efisiensi jejak memori untuk perangkat keras dengan spesifikasi terbatas, serta kecenderungan \textit{overfitting} yang lebih terkendali, meskipun dimensi laten yang lebih sempit menuntut regularisasi yang baik agar separasi lesi berdekatan tetap konsisten \cite{simeoni2025dinov3}. Ringkasan perbandingan spesifikasi struktural kedua varian serta ilustrasi alur arsitektur lengkap dari masukan citra hingga \textit{classification head} disajikan pada Tabel~\ref{tab:spesifikasi_dinov3} dan Gambar~\ref{fig:arsitektur_dinov3}.
+
+\begin{table}[!htbp]
+    \centering
+    \caption{Perbandingan Spesifikasi Struktural Arsitektur DINOv3 ViT-L/16 dan ViT-S/16~\cite{simeoni2025dinov3}.}
+    \label{tab:spesifikasi_dinov3}
+    \footnotesize
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.1cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
+        \toprule
+        \textbf{Karakteristik Arsitektur} & \textbf{DINOv3 ViT-L/16 (\textit{Heavyweight})} & \textbf{DINOv3 ViT-S/16 (\textit{Lightweight})} \\
+        \midrule
+        Jumlah Parameter & $\approx 304$ juta parameter & $\approx 21,6$ juta parameter ($\approx 93\%$ lebih hemat) \\
+        Dimensi \textit{Embedding} ($d$) & $1.024$ saluran & $384$ saluran \\
+        Kedalaman \textit{Encoder} ($L$) & $24$ blok \textit{Transformer Encoder} & $12$ blok \textit{Transformer Encoder} \\
+        Jumlah \textit{Attention Heads} ($h$) & $16$ \textit{heads} paralel & $6$ \textit{heads} paralel \\
+        Konfigurasi Token Input & \multicolumn{2}{>{\centering\arraybackslash}p{8.85cm}}{$196$ \textit{image patch tokens} ($16\times 16$) $+ 1\;\texttt{[CLS]} + 4$ \textit{register tokens}} \\
+        Mekanisme Kunci DINOv3 & \multicolumn{2}{>{\centering\arraybackslash}p{8.85cm}}{\textit{Self-supervised pre-training} (LVD-1689M), \textit{Gram anchoring}, dan \textit{axial RoPE}} \\
+        \textit{Trade-off} Utama & Kapasitas representasi global tinggi; kebutuhan VRAM dan waktu latih besar & Inferensi cepat dan hemat VRAM; kapasitas ruang laten lebih ringkas ($d=384$) \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\begin{figure}[!htbp]
+    \centering
+    \begin{tikzpicture}[
+        >=Latex,
+        font=\sffamily,
+        block/.style={
+            rectangle, rounded corners=3pt, draw=borderblue, line width=0.8pt,
+            fill=boxbgblue, text=headerblue, align=center, font=\sffamily\scriptsize,
+            inner sep=5pt, minimum height=1.0cm
+        },
+        encbox/.style={
+            rectangle, rounded corners=4pt, draw=headerblue, line width=1.1pt,
+            fill=white, align=center, font=\sffamily\scriptsize, inner sep=6pt
+        },
+        headbox/.style={
+            rectangle, rounded corners=3pt, draw=red!65!black, line width=0.9pt,
+            fill=red!4, text=red!45!black, align=center, font=\sffamily\scriptsize,
+            inner sep=5pt, minimum height=0.95cm
+        },
+        sslbadge/.style={
+            rectangle, rounded corners=3pt, draw=teal!65!black, dashed, line width=0.85pt,
+            fill=teal!5, text=teal!55!black, align=center, font=\sffamily\scriptsize,
+            inner sep=5pt
+        },
+        varcard/.style={
+            rectangle, rounded corners=2.5pt, draw=gray!55, line width=0.7pt,
+            fill=gray!6, align=left, font=\sffamily\scriptsize, inner sep=4.5pt
+        },
+        arr/.style={->, thick, draw=headerblue!85!black, rounded corners=3pt}
+    ]
+        % --- Tier 1: Input & Patchify ---
+        \node[block, text width=2.85cm] (inp) {\textbf{Input Tensor}\\Citra Ter-preprocess\\$224 \times 224 \times 3$};
+        \node[block, right=0.55cm of inp, text width=3.35cm] (patch) {\textbf{Patch Embedding}\\Conv $16\times 16$, Stride 16\\$N = 196$ Token $\in \mathbb{R}^{d}$};
+        \node[block, right=0.55cm of patch, text width=4.05cm] (tok) {\textbf{Token Assembly \& RoPE}\\Prepend \texttt{[CLS]} + 4 \textit{Register Tokens}\\Total 201 Token + \textit{Axial RoPE}};
+
+        \draw[arr] (inp) -- (patch);
+        \draw[arr] (patch) -- (tok);
+
+        % --- Tier 2: Transformer Encoder Stack & DINOv3 Variant Specs ---
+        \node[encbox, below=0.80cm of patch, xshift=1.15cm, minimum width=12.4cm] (enc) {
+            \textbf{DINOv3 Transformer Encoder Stack} ($L$ Blok Berurutan)\\[4pt]
+            \tikz{\node[rectangle, rounded corners=2pt, fill=boxbgblue, draw=borderblue, inner sep=3.5pt, font=\sffamily\scriptsize]
+                {$\mathbf{z}'_{\ell} = \mathbf{z}_{\ell-1} + \mathrm{MHSA}(\mathrm{LN}(\mathbf{z}_{\ell-1});\,\mathrm{RoPE})$ \quad $\longrightarrow$ \quad
+                 $\mathbf{z}_{\ell} = \mathbf{z}'_{\ell} + \mathrm{MLP}(\mathrm{LN}(\mathbf{z}'_{\ell}))$};}\\[5pt]
+            \begin{tabular}{@{}p{5.7cm}@{\hspace{0.4cm}}p{5.7cm}@{}}
+                \textbf{Varian ViT-L/16 (\textit{Heavyweight}):} $L=24$, $d=1.024$, $h=16$ ($\approx 304\text{M}$ param.) &
+                \textbf{Varian ViT-S/16 (\textit{Lightweight}):} $L=12$, $d=384$, $h=6$ ($\approx 21,6\text{M}$ param.)
+            \end{tabular}
+        };
+
+        \draw[arr] (tok.south) |- ([yshift=0.35cm]enc.north) -- (enc.north);
+
+        % --- Tier 2 side note / bottom badge for SSL Pretraining ---
+        \node[sslbadge, below=0.45cm of enc, text width=11.9cm] (ssl) {
+            \textbf{DINOv3 SSL Pre-training (LVD-1689M):} \textit{Gram Anchoring} menjaga korelasi fitur padat antar-petak mikrolesi dan mencegah degradasi peta atensi~\cite{simeoni2025dinov3}.
+        };
+
+        % --- Tier 3: Classification Head & Ordinal Prediction ---
+        \node[headbox, below=0.55cm of ssl.south west, anchor=north west, text width=3.55cm] (cls) {\textbf{Feature Extraction}\\Ekstraksi Vektor Token\\Global \texttt{[CLS]} $\in \mathbb{R}^{d}$};
+        \node[headbox, right=0.55cm of cls, text width=3.65cm] (lhead) {\textbf{Linear Classification Head}\\$\mathrm{Dropout}(p=0,2)$\\$\mathrm{Linear}(d \rightarrow 4)$ + \textit{Bias}};
+        \node[block, right=0.55cm of lhead, text width=3.55cm] (out) {\textbf{Softmax Output}\\Probabilitas Kelas\\$P(y=c|x)$, Level 0--3};
+
+        \draw[arr] (enc.west) -- ++(-0.35,0) |- (cls.west);
+        \draw[arr] (cls) -- (lhead);
+        \draw[arr] (lhead) -- (out);
+    \end{tikzpicture}
+    \caption{Arsitektur \textit{Vision Foundation Model} DINOv3 (Varian ViT-L/16 dan ViT-S/16) Beserta \textit{Linear Classification Head} untuk Klasifikasi Keparahan Jerawat.}
+    \label{fig:arsitektur_dinov3}
+\end{figure}
+
+\subsection{Rasionalisasi Pemilihan Model}
+Pemilihan model dalam penelitian ini ditetapkan secara selektif pada keluarga \textit{Vision Foundation Model} DINOv3 dengan mengontraskan dua skala representatif, yakni \textbf{DINOv3 ViT-L/16} ($\approx 304$ juta parameter) sebagai representasi \textit{heavyweight} dan \textbf{DINOv3 ViT-S/16} ($\approx 21,6$ juta parameter) sebagai representasi \textit{lightweight}. Sebagian besar studi terdahulu pada dataset ACNE04 masih mengandalkan \textit{backbone} CNN konvensional seperti ResNet-50, VGG-16, MobileNetV2, dan EfficientNet-B0 yang dibatasi oleh \textit{receptive field} lokal \cite{wu2019, lin2022, zeng2026}, sehingga memerlukan modul tambahan untuk mengintegrasikan sebaran lesi di dahi, pipi, dan dagu. Di sisi lain, \textit{Vision Transformer} yang dilatih terawasi pada ImageNet cenderung bias terhadap objek makro tunggal, model visi-bahasa seperti CLIP atau SigLIP mengutamakan keselarasan semantik teks-citra kasar yang melemahkan lokalisasi piksel mikro, sedangkan pendahulunya DINOv2 rentan terhadap artefak token ber-norma tinggi dan peluruhan kualitas fitur spasial rapat ketika dilatih dalam durasi panjang \cite{oquab2023dinov2}. Integrasi \textit{Gram anchoring}, \textit{axial RoPE}, dan \textit{register tokens} pada DINOv3 yang dilatih secara \textit{self-supervised} di atas korpus \textit{LVD-1689M} ($\approx 1,69$ miliar citra) mengatasi kelemahan tersebut sehingga ketajaman fitur mikrolesi lokal (komedo, papula, pustula) terjaga berdampingan dengan konteks wajah global sesuai tuntutan Kriteria Hayashi \cite{hayashi2008, simeoni2025dinov3}.
+
+Penentuan pasangan ekstrem ViT-S/16 dan ViT-L/16 (dibanding menggunakan satu arsitektur tunggal, varian menengah ViT-B/16, maupun varian super-masif ViT-H+/16 dan ViT-7B) didorong oleh prinsip desain eksperimen yang mengisolasi efek penskalaan kapasitas. Varian \textbf{ViT-S/16} ($\approx 21,6\text{M}$ parameter) dipilih sebagai batas bawah efisien karena jejak parameternya sebanding dengan CNN klinis standar seperti ResNet-50 ($\approx 25,6\text{M}$), namun dibekali mekanisme \textit{global self-attention} penuh dan kebutuhan memori VRAM yang ringan. Sebaliknya, \textbf{ViT-L/16} ($\approx 304\text{M}$ parameter, sekitar $14\times$ lebih besar) merupakan varian berkapasitas besar tertinggi dalam lini DINOv3 yang masih praktis menjalani \textit{end-to-end fine-tuning} pada satu unit GPU riset tanpa infrastruktur \textit{multi-GPU} yang dituntut oleh ViT-H+/16 ($\approx 840\text{M}$) maupun ViT-7B ($6,7\text{B}$), yang justru berisiko mengalami \textit{severe overfitting} pada dataset ACNE04 bervolume moderat.
+
+Karena kedua varian berbagi skema \textit{patch tokenization} yang identik ($16 \times 16$ piksel menghasilkan 196 token visual pada resolusi $224 \times 224$) serta bobot dasar hasil \textit{self-supervised pre-training} pada LVD-1689M \cite{simeoni2025dinov3}, perbandingan keduanya di bawah \textit{preprocessing pipeline} terpadu satu jalur dan strategi penanganan \textit{class imbalance} yang seragam membentuk dikotomi skala yang terkontrol secara ilmiah. Pengujian \textit{head-to-head} ini menghilangkan bias kerancuan lintas-keluarga arsitektur (seperti konvolusi melawan atensi) sekaligus menjawab pertanyaan empiris krusial pada $1.457$ citra ACNE04: apakah kapasitas 304 juta parameter pada ViT-L/16 menghasilkan peningkatan \textit{Macro F1-Score}, \textit{Quadratic Weighted Kappa} (QWK), dan sensitivitas kasus sangat parah (Level 3) yang bermakna secara klinis, ataukah ViT-S/16 telah mencapai saturasi performa dengan efisiensi komputasi yang jauh lebih unggul.
+
+% -----------------------------------------------------------------------------
+
+\section{Penelitian Terdahulu}
+
+Riset otomatisasi penilaian keparahan jerawat berbasis \textit{deep learning} pada dataset \textit{benchmark} ACNE04 dipelopori oleh Wu et al. (2019) yang memperkenalkan dataset tersebut beserta metode \textit{Label Distribution Learning} (LDL) berbasis ResNet-50 \cite{wu2019}. Melalui pemodelan derajat keparahan sebagai distribusi probabilitas Gauss untuk meredam ambiguitas antar-level, studi ini membukukan akurasi 84,11\% dengan kesalahan penghitungan lesi rata-rata (MAE) sebesar 2,93 \cite{wu2019}. Berangkat dari identifikasi \textit{background clutter} pada studi awal tersebut, Lin et al. (2022) mengusulkan kerangka \textit{multi-stream} KIEGLFN berbasis VGG-16 yang mengisolasi area kulit wajah dan memadukan fitur fasial global dengan potongan lokal $3\times 3$, sehingga meningkatkan akurasi menjadi 84,52\% \cite{lin2022}. Pada tahun yang sama, Liu et al. (2022) merancang \textit{AcneGrader} menggunakan strategi \textit{bagging ensemble} atas 30 jaringan CNN yang dipangkas secara selektif (\textit{diversity pruning}) dengan pengklasifikasi SVM, memperoleh akurasi sebesar 85,82\% \cite{liu2022}.
+
+Perkembangan selanjutnya bergeser ke arah efisiensi parameter dan interpretabilitas klinis. Suriani et al. (2023) menguji adaptasi \textit{transfer learning} pada arsitektur ringan MobileNetV2 di ACNE04 dan mencatat akurasi sebesar 87,29\% dengan nilai F1-Score 86,0\% \cite{suriani2023}. Baru-baru ini, Zeng et al. (2026) menerapkan \textit{end-to-end fine-tuning} pada EfficientNet-B0 yang dipadukan dengan skema \textit{stratified sampling}, optimasi AdamW, dan visualisasi atribusi Grad-CAM, berhasil meraih akurasi 93,50\%, \textit{Macro F1-Score} 94,40\%, dan nilai \textit{Kappa} 0,956 \cite{zeng2026}. Ringkasan perbandingan metodologi, metrik evaluasi, capaian hasil, dan catatan keterbatasan dari kelima penelitian kunci tersebut dirangkum pada Tabel~\ref{tab:penelitian_terdahulu}.
+
+\begin{table}[!htbp]
+    \centering
+    \caption{Matriks Perbandingan Penelitian Terdahulu Klasifikasi Keparahan Jerawat.}
+    \label{tab:penelitian_terdahulu}
+    \footnotesize
+    \renewcommand{\arraystretch}{1.3}
+    \setlength{\tabcolsep}{3.5pt}
+    \begin{tabularx}{\textwidth}{
+        >{\hsize=1.10\hsize\raggedright\arraybackslash}X
+        >{\hsize=0.65\hsize\raggedright\arraybackslash}X
+        >{\hsize=1.15\hsize\raggedright\arraybackslash}X
+        >{\hsize=0.80\hsize\raggedright\arraybackslash}X
+        >{\hsize=0.95\hsize\raggedright\arraybackslash}X
+        >{\hsize=1.35\hsize\raggedright\arraybackslash}X
+    }
+        \toprule
+        \textbf{Peneliti \& Tahun} & \textbf{Dataset} & \textbf{Metode / Arsitektur} & \textbf{Metrik Evaluasi} & \textbf{Hasil Utama} & \textbf{Keterbatasan \& Catatan} \\
+        \midrule
+        \textbf{Wu et~al.}\newline(2019)~\cite{wu2019} & ACNE04\newline(1.457 citra) & ResNet-50 + \textit{Label Distribution Learning} (LDL) & Akurasi, MAE Hitung & Akurasi: 84,11\%\newline MAE: 2,93 & Masih menyertakan \textit{background clutter}; formulasi LDL relatif kompleks. \\
+        \midrule
+        \textbf{Lin et~al.}\newline(2022)~\cite{lin2022} & ACNE04\newline(1.457 citra) & VGG-16 + KIEGLFN (\textit{Global-Local Fusion} + Isolasi Kulit) & Akurasi, \textit{Sensitivity}, \textit{Specificity} & Akurasi: 84,52\%\newline \textit{Sensitivity}: 81,95\% & \textit{Backbone} VGG-16 sangat berat; pemrosesan \textit{multi-stream} rumit. \\
+        \midrule
+        \textbf{Liu et~al.}\newline(2022)~\cite{liu2022} & ACNE04\newline(1.457 citra) & \textit{AcneGrader}: \textit{Ensemble} 30 CNN + SVM & Akurasi, \textit{Precision}, \textit{Youden Index} & Akurasi: 85,82\%\newline (ResNet-50: 78,42\%) & Beban komputasi \textit{training} 30 arsitektur sangat tinggi. \\
+        \midrule
+        \textbf{Suriani et~al.}\newline(2023)~\cite{suriani2023} & ACNE04\newline(1.457 citra) & MobileNetV2 + \textit{Transfer Learning} & Akurasi, \textit{Precision}, \textit{Recall}, F1-Score & Akurasi: 87,29\%\newline F1-Score: 86,0\% & Belum menerapkan penanganan \textit{class imbalance} secara mendalam. \\
+        \midrule
+        \textbf{Zeng et~al.}\newline(2026)~\cite{zeng2026} & ACNE04\newline(1.457 \& 2.983 citra) & EfficientNet-B0 + Grad-CAM + AdamW + \textit{Stratified} & Akurasi, Macro-F1, Kappa ($\kappa$) & Akurasi: 93,50\%\newline Macro-F1: 94,40\%\newline Kappa: 0,956 & Hanya menguji satu arsitektur CNN; tidak ada komparasi skala \textit{head-to-head}. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+Berdasarkan pemetaan literatur di atas, tren riset klasifikasi jerawat bergerak dari jaringan konvolusi standar menuju integrasi penajaman wilayah kulit, optimasi terregularisasi, serta strategi pelabelan yang mempertimbangkan sifat ordinal penyakit. Meskipun demikian, seluruh studi \textit{benchmark} ACNE04 pada Tabel~\ref{tab:penelitian_terdahulu} masih bertumpu sepenuhnya pada arsitektur CNN yang berfokus pada pola lokal, dan belum mengevaluasi kapabilitas paradigma \textit{Vision Transformer} maupun \textit{vision foundation model} berskala besar. Selain itu, literatur yang ada belum menyediakan kajian komparatif terkontrol \textit{head-to-head} antara varian \textit{vision foundation model} \textit{heavyweight} dan \textit{lightweight} dalam satu keluarga arsitektur yang sama di bawah protokol \textit{preprocessing} serta skenario penanganan \textit{class imbalance} yang identik.
+
+Penelitian ini memposisikan diri untuk mengisi kesenjangan tersebut melalui studi evaluasi komparatif atas adaptasi \textit{transfer learning} \textit{vision foundation model} \textit{self-supervised} DINOv3 varian ViT-L/16 ($\approx 304$ juta parameter) terhadap ViT-S/16 ($\approx 21,6$ juta parameter) pada dataset ACNE04 tanpa menambahkan kerumitan modul fusi eksternal yang artifisial. Fokus kajian diarahkan pada penyelidikan keseimbangan antara daya tangkap representasi semantik global, sensitivitas klinis terhadap tingkat keparahan sangat parah (Level 3), konsistensi ordinal \textit{Quadratic Weighted Kappa} (QWK), serta efisiensi sumber daya komputasi untuk penerapan praktis sistem penunjang keputusan dermatologi.

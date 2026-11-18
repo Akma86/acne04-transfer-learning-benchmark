@@ -34,7 +34,7 @@ warnings.filterwarnings("ignore")
 # Configuration and Path Setup
 # -----------------------------------------------------------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent
-RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw" / "acne_1024"
+RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw" / "acne04"
 OUTPUT_FIG_DIR = PROJECT_ROOT / "outputs" / "figures"
 PAPER_FIG_DIR = PROJECT_ROOT / "docs" / "paper" / "Gambar"
 METADATA_DIR = PROJECT_ROOT / "data" / "metadata"
@@ -55,17 +55,17 @@ plt.rcParams.update({
 })
 
 SEVERITY_PALETTE = {
-    "Level 0 (Normal / Clear)": "#2ecc71",
-    "Level 1 (Mild)": "#3498db",
-    "Level 2 (Moderate)": "#f39c12",
-    "Level 3 (Severe)": "#e74c3c",
+    "Level 0 (Mild)": "#2ecc71",
+    "Level 1 (Moderate)": "#3498db",
+    "Level 2 (Severe)": "#f39c12",
+    "Level 3 (Very Severe)": "#e74c3c",
 }
 
 CLASS_CONFIG = {
-    "acne0_1024": {"label": 0, "tier": "Level 0 (Normal / Clear)", "hayashi": "0 - 5 lesions"},
-    "acne1_1024": {"label": 1, "tier": "Level 1 (Mild)", "hayashi": "6 - 20 lesions"},
-    "acne2_1024": {"label": 2, "tier": "Level 2 (Moderate)", "hayashi": "21 - 50 lesions"},
-    "acne3_1024": {"label": 3, "tier": "Level 3 (Severe)", "hayashi": "> 50 lesions"},
+    "level_0_mild": {"label": 0, "tier": "Level 0 (Mild)", "hayashi": "0 - 5 lesions"},
+    "level_1_moderate": {"label": 1, "tier": "Level 1 (Moderate)", "hayashi": "6 - 20 lesions"},
+    "level_2_severe": {"label": 2, "tier": "Level 2 (Severe)", "hayashi": "21 - 50 lesions"},
+    "level_3_very_severe": {"label": 3, "tier": "Level 3 (Very Severe)", "hayashi": "> 50 lesions"},
 }
 
 
@@ -93,11 +93,13 @@ def load_dataset():
             print(f"  [WARNING] Folder not found: {folder_path}")
             continue
 
-        for img_path in sorted(folder_path.glob("*.jpg")):
+        valid_exts = {".jpg", ".jpeg", ".png"}
+        for img_path in sorted(p for p in folder_path.iterdir() if p.is_file() and p.suffix.lower() in valid_exts):
             size_kb = round(os.path.getsize(img_path) / 1024.0, 2)
             rel_path = str(img_path.relative_to(PROJECT_ROOT)).replace("\\", "/")
             records.append({
                 "filepath": rel_path,
+                "relative_path": rel_path,
                 "abs_path": str(img_path),
                 "filename": img_path.name,
                 "label": cfg["label"],
@@ -188,19 +190,24 @@ def analyze_physical_properties(df):
     print("STEP 3: Checking Physical Dimensions & Aspect Ratios...")
     print("=" * 65)
 
-    # Sample subset for fast dimension check
     dims = []
     aspect_ratios = []
-    for _, row in df.sample(min(200, len(df)), random_state=42).iterrows():
+    for _, row in df.iterrows():
         with Image.open(row["abs_path"]) as img:
             w, h = img.size
             dims.append((w, h))
             aspect_ratios.append(w / h)
 
+    widths = [w for w, _ in dims]
+    heights = [h for _, h in dims]
     unique_dims = set(dims)
     unique_ar = set(np.round(aspect_ratios, 2))
-    print(f"Sampled Dimensions : {unique_dims}")
-    print(f"Aspect Ratios      : {unique_ar} (1.0 = Standard Square)")
+    q1_kb, med_kb, q3_kb = np.percentile(df["size_kb"], [25, 50, 75])
+    print(f"Total Inspected    : {len(dims)} images ({len(unique_dims)} unique resolutions)")
+    print(f"Width Range (px)   : {min(widths)} .. {max(widths)} (median {np.median(widths):.0f})")
+    print(f"Height Range (px)  : {min(heights)} .. {max(heights)} (median {np.median(heights):.0f})")
+    print(f"Aspect Ratios      : min={min(aspect_ratios):.3f}, max={max(aspect_ratios):.3f}, median={np.median(aspect_ratios):.3f} ({len(unique_ar)} rounded unique)")
+    print(f"File Size (KB)     : median={med_kb:.2f}, IQR=[{q1_kb:.2f}, {q3_kb:.2f}], min={df['size_kb'].min():.2f}, max={df['size_kb'].max():.2f}")
 
     # Plot File Size Boxplot
     fig, ax = plt.subplots(figsize=(8, 4.5))
@@ -376,23 +383,23 @@ def compute_normalization_constants(df):
     print("STEP 6: Calculating Empirical RGB Normalization Constants...")
     print("=" * 65)
 
-    # Sample 300 representative images
-    sample_df = df.sample(min(300, len(df)), random_state=42)
     rgb_means = []
     rgb_stds = []
 
-    for _, row in sample_df.iterrows():
+    for _, row in df.iterrows():
         img = cv2.imread(row["abs_path"])
         if img is None:
             continue
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) / 255.0
-        rgb_means.append(np.mean(img, axis=(0, 1)))
-        rgb_stds.append(np.std(img, axis=(0, 1)))
+        # OpenCV computes C++ double-precision mean/stddev directly on uint8 without 8x RAM float64 copies
+        mean_bgr, std_bgr = cv2.meanStdDev(img)
+        rgb_means.append(mean_bgr[::-1, 0] / 255.0)
+        rgb_stds.append(std_bgr[::-1, 0] / 255.0)
 
     mean_rgb = np.mean(rgb_means, axis=0)
     std_rgb = np.mean(rgb_stds, axis=0)
 
     print("\n=== Normalization Constants Comparison ===")
+    print(f"Computed across N = {len(rgb_means)} images")
     print(f"ImageNet Defaults : Mean = [0.485, 0.456, 0.406], Std = [0.229, 0.224, 0.225]")
     print(f"Empirical ACNE04  : Mean = [{mean_rgb[0]:.4f}, {mean_rgb[1]:.4f}, {mean_rgb[2]:.4f}], "
           f"Std = [{std_rgb[0]:.4f}, {std_rgb[1]:.4f}, {std_rgb[2]:.4f}]")
